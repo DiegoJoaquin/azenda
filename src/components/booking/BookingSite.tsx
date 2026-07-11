@@ -6,12 +6,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import {
-  useDB,
-  upsertClientByEmail,
-  addAppointment,
-  newId,
-} from "@/lib/store";
+import { useDB, submitBooking } from "@/lib/store";
 import {
   getAvailableSlots,
   type BookingSelection,
@@ -25,10 +20,8 @@ import {
   fmtDuration,
   fmtTime,
   sameDay,
-  toISO,
-  addMinutes,
 } from "@/lib/dates";
-import type { Appointment, DB } from "@/lib/types";
+import { isBusinessLocked, type Appointment, type DB } from "@/lib/types";
 
 const DAY_NAMES = [
   "domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado",
@@ -66,6 +59,7 @@ export default function BookingSite({ slug }: { slug: string }) {
   const [form, setForm] = useState({ name: "", email: "", phone: "", note: "" });
   const [error, setError] = useState("");
   const [confirmed, setConfirmed] = useState<Appointment | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const biz = db.business;
 
@@ -99,6 +93,25 @@ export default function BookingSite({ slug }: { slug: string }) {
     );
   }
 
+  // Negocio suspendido o con prueba vencida: reservas online pausadas
+  if (isBusinessLocked(biz) || !biz.onlineBookingEnabled) {
+    return (
+      <div className="flex min-h-screen items-center justify-center px-6">
+        <div className="max-w-sm text-center">
+          <p className="font-serif text-3xl">{biz.name}</p>
+          <p className="mt-4 text-ink-soft">
+            Las reservas online están temporalmente desactivadas.
+          </p>
+          {biz.phone && (
+            <p className="mt-2 text-sm text-ink-faint">
+              Puedes agendar directamente al {biz.phone}.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   const totalPrice = selectedServices.reduce(
     (sum, id) => sum + (db.services.find((s) => s.id === id)?.priceClp ?? 0),
     0
@@ -115,13 +128,14 @@ export default function BookingSite({ slug }: { slug: string }) {
     setSlot(null);
   }
 
-  function confirmBooking() {
-    if (!slot) return;
+  async function confirmBooking() {
+    if (!slot || submitting) return;
     if (!form.name.trim() || !form.email.trim() || !form.phone.trim()) {
       setError("Completa tu nombre, correo y teléfono para confirmar.");
       return;
     }
-    // Re-validación final del slot (equivalente demo del lock transaccional)
+    // Re-validación local del slot; la validación definitiva la hace el
+    // servidor (RPC transaccional) en modo real.
     const fresh = getAvailableSlots(db, day, selections).find(
       (s) => s.start.getTime() === slot.start.getTime()
     );
@@ -131,36 +145,30 @@ export default function BookingSite({ slug }: { slug: string }) {
       setSlot(null);
       return;
     }
-    const client = upsertClientByEmail({
+    setSubmitting(true);
+    const result = await submitBooking({
       name: form.name.trim(),
       email: form.email.trim(),
       phone: form.phone.trim(),
-    });
-    const items = fresh.assignment.map((a) => {
-      const svc = db.services.find((s) => s.id === a.serviceId)!;
-      return {
+      note: form.note.trim(),
+      items: fresh.assignment.map((a) => ({
         serviceId: a.serviceId,
         staffId: a.staffId,
-        startsAt: toISO(a.startsAt),
-        durationMin: svc.durationMin,
-        priceClp: svc.priceClp,
-      };
+        startsAt: a.startsAt,
+      })),
     });
-    const last = items[items.length - 1];
-    const appt: Appointment = {
-      id: newId("appt"),
-      clientId: client.id,
-      status: biz.requiresApproval ? "pendiente" : "confirmada",
-      origin: "online",
-      startsAt: items[0].startsAt,
-      endsAt: toISO(addMinutes(new Date(last.startsAt), last.durationMin)),
-      totalClp: totalPrice,
-      clientNote: form.note.trim() || undefined,
-      createdAt: new Date().toISOString(),
-      items,
-    };
-    addAppointment(appt);
-    setConfirmed(appt);
+    setSubmitting(false);
+    if (!result.ok) {
+      if (result.error === "SLOT_TAKEN") {
+        setError("Ese horario acaba de ser tomado. Elige otro, por favor.");
+        setStep("horario");
+        setSlot(null);
+      } else {
+        setError("No pudimos completar la reserva. Inténtalo de nuevo en unos segundos.");
+      }
+      return;
+    }
+    setConfirmed(result.appt);
     setStep("listo");
     setError("");
   }
@@ -601,9 +609,10 @@ export default function BookingSite({ slug }: { slug: string }) {
                 {step === "confirmar" ? (
                   <button
                     onClick={confirmBooking}
-                    className="rounded-md bg-sage px-7 py-3 text-sm font-medium text-white transition-colors hover:bg-sage-deep"
+                    disabled={submitting}
+                    className="rounded-md bg-sage px-7 py-3 text-sm font-medium text-white transition-colors hover:bg-sage-deep disabled:opacity-60"
                   >
-                    Confirmar reserva
+                    {submitting ? "Confirmando…" : "Confirmar reserva"}
                   </button>
                 ) : (
                   <button

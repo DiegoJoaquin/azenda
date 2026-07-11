@@ -1,4 +1,4 @@
-import BookingSite from "@/components/booking/BookingSite";
+import PublicSite from "@/components/booking/PublicSite";
 import ClientGate from "@/components/ClientGate";
 
 export default async function BusinessPage({
@@ -9,7 +9,7 @@ export default async function BusinessPage({
   const { slug } = await params;
   return (
     <ClientGate>
-      <BookingSite slug={slug} />
+      <PublicSite slug={slug} />
     </ClientGate>
   );
 }

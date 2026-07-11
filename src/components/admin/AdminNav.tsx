@@ -1,21 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useDB } from "@/lib/store";
+import { supabase } from "@/lib/supabase";
 
 const NAV = [
-  { href: "/app", label: "Agenda", icon: "▤" },
-  { href: "/app/clientes", label: "Clientes", icon: "◑" },
-  { href: "/app/servicios", label: "Servicios", icon: "✂" },
-  { href: "/app/equipo", label: "Equipo", icon: "❖" },
-  { href: "/app/finanzas", label: "Finanzas", icon: "◈" },
-  { href: "/app/configuracion", label: "Configuración", icon: "◎" },
+  { suffix: "", label: "Agenda", icon: "▤" },
+  { suffix: "/clientes", label: "Clientes", icon: "◑" },
+  { suffix: "/servicios", label: "Servicios", icon: "✂" },
+  { suffix: "/equipo", label: "Equipo", icon: "❖" },
+  { suffix: "/finanzas", label: "Finanzas", icon: "◈" },
+  { suffix: "/configuracion", label: "Configuración", icon: "◎" },
 ];
 
 export default function AdminNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const db = useDB();
+  const isDemo = pathname.startsWith("/demo");
+  const base = isDemo ? "/demo" : "/app";
 
   return (
     <aside className="sticky top-0 flex h-screen w-56 shrink-0 flex-col border-r border-line bg-surface">
@@ -30,14 +34,13 @@ export default function AdminNav() {
 
       <nav className="flex-1 space-y-0.5 px-3 py-4">
         {NAV.map((item) => {
+          const href = `${base}${item.suffix}`;
           const active =
-            item.href === "/app"
-              ? pathname === "/app"
-              : pathname.startsWith(item.href);
+            item.suffix === "" ? pathname === base : pathname.startsWith(href);
           return (
             <Link
-              key={item.href}
-              href={item.href}
+              key={href}
+              href={href}
               className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
                 active
                   ? "bg-sage-tint font-medium text-sage-deep"
@@ -60,9 +63,21 @@ export default function AdminNav() {
         >
           Ver mi página de reservas →
         </Link>
-        <p className="mt-2 text-[11px] leading-relaxed text-ink-faint">
-          Modo demo · los datos viven en este navegador
-        </p>
+        {isDemo ? (
+          <p className="mt-2 text-[11px] leading-relaxed text-ink-faint">
+            Modo demo · los datos viven en este navegador
+          </p>
+        ) : (
+          <button
+            onClick={async () => {
+              await supabase().auth.signOut();
+              router.replace("/login");
+            }}
+            className="mt-2 text-[11px] text-ink-faint transition-colors hover:text-ink"
+          >
+            Cerrar sesión
+          </button>
+        )}
       </div>
     </aside>
   );

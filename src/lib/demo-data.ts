@@ -21,6 +21,8 @@ const business = {
   maxLeadDays: 45,
   cancellationHours: 24,
   slotGranularityMin: 15,
+  planStatus: "active" as const,
+  trialEndsAt: "2099-01-01T00:00:00",
 };
 
 const staff = [

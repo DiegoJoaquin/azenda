@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { whatsappLink, TRIAL_DAYS } from "@/lib/config";
 
 const FEATURES = [
   {
@@ -38,16 +39,17 @@ const VERTICALS = [
 
 const PLANS = [
   {
-    name: "Gratis",
-    price: "$0",
-    period: "para siempre",
+    name: "Individual",
+    price: "$9.900",
+    period: "por mes",
     features: [
       "1 profesional",
       "Agenda y reservas online",
-      "Hasta 50 citas al mes",
-      "Recordatorios por correo",
+      "Citas ilimitadas",
+      "Clientes y finanzas",
     ],
-    cta: "Comenzar gratis",
+    cta: `Prueba gratis por ${TRIAL_DAYS} días`,
+    href: "/registro",
     highlight: false,
   },
   {
@@ -57,11 +59,12 @@ const PLANS = [
     features: [
       "Hasta 8 profesionales",
       "Citas ilimitadas",
-      "Recordatorios por WhatsApp",
-      "Anticipos y pagos online",
+      "Bloqueos y turnos por persona",
       "Reportes de ingresos y ocupación",
+      "Soporte por WhatsApp",
     ],
-    cta: "Probar 14 días gratis",
+    cta: `Prueba gratis por ${TRIAL_DAYS} días`,
+    href: "/registro",
     highlight: true,
   },
   {
@@ -70,11 +73,12 @@ const PLANS = [
     period: "por mes",
     features: [
       "Profesionales ilimitados",
-      "Multi-sucursal",
+      "Multi-sucursal (próximamente)",
       "Permisos por rol",
       "Soporte prioritario",
     ],
-    cta: "Conversemos",
+    cta: "Hablemos por WhatsApp",
+    href: whatsappLink("Hola, me interesa el plan Empresa de Azenda."),
     highlight: false,
   },
 ];
@@ -91,18 +95,18 @@ export default function Home() {
             <a href="#rubros" className="hover:text-ink">Rubros</a>
             <a href="#precios" className="hover:text-ink">Precios</a>
           </nav>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Link
-              href="/aura-estudio"
+              href="/login"
               className="hidden text-sm text-ink-soft hover:text-ink sm:block"
             >
-              Ver demo de reserva
+              Iniciar sesión
             </Link>
             <Link
-              href="/app"
+              href="/registro"
               className="rounded-md bg-sage px-4 py-2 text-sm text-white transition-colors hover:bg-sage-deep"
             >
-              Entrar al panel
+              Crear cuenta gratis
             </Link>
           </div>
         </div>
@@ -126,14 +130,20 @@ export default function Home() {
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
-              href="/app"
+              href="/registro"
               className="rounded-md bg-ink px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-black"
             >
-              Explorar el panel
+              Crea tu cuenta — {TRIAL_DAYS} días gratis
+            </Link>
+            <Link
+              href="/demo"
+              className="rounded-md border border-line-strong px-6 py-3 text-sm font-medium transition-colors hover:border-ink"
+            >
+              Probar la demo
             </Link>
             <Link
               href="/aura-estudio"
-              className="rounded-md border border-line-strong px-6 py-3 text-sm font-medium transition-colors hover:border-ink"
+              className="text-sm text-ink-soft underline-offset-4 hover:underline"
             >
               Reservar como cliente →
             </Link>
@@ -240,7 +250,7 @@ export default function Home() {
                   ))}
                 </ul>
                 <Link
-                  href="/app"
+                  href={p.href}
                   className={`mt-8 block rounded-md py-2.5 text-center text-sm font-medium transition-colors ${
                     p.highlight
                       ? "bg-sage text-white hover:bg-sage-deep"
@@ -252,6 +262,11 @@ export default function Home() {
               </div>
             ))}
           </div>
+          <p className="mx-auto mt-8 max-w-lg text-center text-sm text-ink-faint">
+            Todos los planes parten con {TRIAL_DAYS} días de prueba, sin
+            tarjeta. El pago es mensual por transferencia bancaria — nos
+            escribes, transfieres y tu cuenta queda activa el mismo día.
+          </p>
         </div>
       </section>
 

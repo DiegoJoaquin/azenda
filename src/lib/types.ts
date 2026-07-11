@@ -21,6 +21,8 @@ export type AppointmentStatus =
 
 export type AppointmentOrigin = "online" | "manual";
 
+export type PlanStatus = "trial" | "active" | "suspended";
+
 export interface Business {
   id: string;
   slug: string;
@@ -36,6 +38,8 @@ export interface Business {
   maxLeadDays: number;
   cancellationHours: number;
   slotGranularityMin: number;
+  planStatus: PlanStatus;
+  trialEndsAt: string; // ISO
 }
 
 export interface Staff {
@@ -134,6 +138,13 @@ export const STATUS_LABEL: Record<AppointmentStatus, string> = {
   cancelada: "Cancelada",
   no_show: "No asistió",
 };
+
+/** Cuenta bloqueada: suspendida o con la prueba vencida. */
+export function isBusinessLocked(b: Business): boolean {
+  if (b.planStatus === "suspended") return true;
+  if (b.planStatus === "trial") return new Date(b.trialEndsAt) < new Date();
+  return false;
+}
 
 export const VERTICAL_LABEL: Record<Vertical, string> = {
   peluqueria: "Peluquería",
