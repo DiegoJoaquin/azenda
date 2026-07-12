@@ -143,14 +143,14 @@ export default function FinanzasPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-line bg-surface px-8 py-4">
+      <header className="border-b border-line bg-surface px-4 py-4 md:px-8">
         <h1 className="font-serif text-2xl tracking-tight">Finanzas</h1>
         <p className="text-sm text-ink-faint">
           Ingresos por citas completadas · pago en el local
         </p>
       </header>
 
-      <div className="mx-auto max-w-5xl space-y-8 px-8 py-10">
+      <div className="mx-auto max-w-5xl space-y-8 px-4 py-6 md:px-8 md:py-10">
         {/* Indicadores principales */}
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line lg:grid-cols-4">
           <Kpi label="Hoy" value={fmtCLP(m.hoy)} />

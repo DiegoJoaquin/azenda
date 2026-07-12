@@ -15,7 +15,7 @@ export default function DemoShell({
   ensureDemoMode();
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-dvh flex-col">
       <div className="flex items-center justify-center gap-3 border-b border-line bg-sage-tint px-4 py-2 text-sm text-ink-soft">
         <span>
           Estás explorando la <strong className="text-ink">demo</strong> con
@@ -27,7 +27,9 @@ export default function DemoShell({
       </div>
       <div className="flex min-h-0 flex-1">
         <AdminNav />
-        <main className="min-w-0 flex-1">{children}</main>
+        <main className="min-w-0 flex-1 overflow-auto pb-14 md:pb-0">
+          {children}
+        </main>
       </div>
     </div>
   );

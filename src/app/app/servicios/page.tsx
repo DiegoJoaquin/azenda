@@ -10,7 +10,7 @@ export default function ServiciosPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="flex items-center justify-between border-b border-line bg-surface px-8 py-4">
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-surface px-4 py-4 md:px-8">
         <div>
           <h1 className="font-serif text-2xl tracking-tight">Servicios</h1>
           <p className="text-sm text-ink-faint">
@@ -25,7 +25,7 @@ export default function ServiciosPage() {
         </button>
       </header>
 
-      <div className="mx-auto max-w-4xl space-y-10 px-8 py-10">
+      <div className="mx-auto max-w-4xl space-y-10 px-4 py-6 md:px-8 md:py-10">
         {db.categories
           .sort((a, b) => a.sortOrder - b.sortOrder)
           .map((cat) => {
@@ -40,8 +40,8 @@ export default function ServiciosPage() {
                 <h2 className="mb-3 text-xs uppercase tracking-[0.18em] text-ink-faint">
                   {cat.name}
                 </h2>
-                <div className="overflow-hidden rounded-lg border border-line bg-surface">
-                  <table className="w-full text-sm">
+                <div className="overflow-x-auto rounded-lg border border-line bg-surface">
+                  <table className="w-full min-w-[680px] text-sm">
                     <thead>
                       <tr className="border-b border-line bg-paper text-left text-xs text-ink-faint">
                         <th className="px-5 py-2.5 font-normal">Servicio</th>

@@ -53,10 +53,19 @@ export default function AgendaView() {
   const [day, setDay] = useState(() => new Date());
   const [selected, setSelected] = useState<Appointment | null>(null);
   const [modal, setModal] = useState<ModalPrefill | null>(null);
+  // En pantallas chicas se puede filtrar a un solo profesional
+  const [staffFilter, setStaffFilter] = useState<string>("all");
 
-  const staff = useMemo(
+  const allStaff = useMemo(
     () => [...db.staff].filter((s) => s.active).sort((a, b) => a.sortOrder - b.sortOrder),
     [db.staff]
+  );
+  const staff = useMemo(
+    () =>
+      staffFilter === "all"
+        ? allStaff
+        : allStaff.filter((s) => s.id === staffFilter),
+    [allStaff, staffFilter]
   );
 
   const dayAppts = useMemo(
@@ -81,19 +90,34 @@ export default function AgendaView() {
     : null;
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-full flex-col">
       {/* Barra superior */}
-      <header className="flex items-center justify-between border-b border-line bg-surface px-6 py-4">
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-surface px-4 py-3 md:px-6 md:py-4">
         <div>
-          <h1 className="font-serif text-2xl tracking-tight">Agenda</h1>
+          <h1 className="font-serif text-xl tracking-tight md:text-2xl">Agenda</h1>
           <p className="text-sm capitalize text-ink-faint">{fmtDayLong(day)}</p>
         </div>
         <div className="flex items-center gap-2">
+          {allStaff.length > 1 && (
+            <select
+              value={staffFilter}
+              onChange={(e) => setStaffFilter(e.target.value)}
+              className="rounded-md border border-line bg-paper px-2 py-2 text-sm outline-none focus:border-sage md:hidden"
+              aria-label="Filtrar profesional"
+            >
+              <option value="all">Todos</option>
+              {allStaff.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name.split(" ")[0]}
+                </option>
+              ))}
+            </select>
+          )}
           <button
             onClick={() => setModal({})}
-            className="mr-2 rounded-md bg-sage px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-sage-deep"
+            className="whitespace-nowrap rounded-md bg-sage px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-sage-deep md:mr-2 md:px-4"
           >
-            + Nueva cita
+            + Nueva<span className="hidden sm:inline"> cita</span>
           </button>
           <button
             onClick={() => setDay((d) => addDays(d, -1))}
@@ -117,7 +141,7 @@ export default function AgendaView() {
       </header>
 
       {/* Leyenda de estados */}
-      <div className="flex flex-wrap items-center gap-4 border-b border-line bg-paper px-6 py-2.5">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-line bg-paper px-4 py-2.5 md:px-6">
         {(Object.keys(STATUS_LABEL) as AppointmentStatus[]).map((st) => (
           <span key={st} className="flex items-center gap-1.5 text-xs text-ink-soft">
             <span
@@ -131,7 +155,7 @@ export default function AgendaView() {
       <div className="flex min-h-0 flex-1">
         {/* Grilla del calendario */}
         <div className="flex-1 overflow-auto">
-          <div className="flex min-w-[900px]">
+          <div className="flex min-w-fit">
             {/* Columna de horas */}
             <div className="w-14 shrink-0 border-r border-line">
               <div className="h-12 border-b border-line" />
@@ -318,7 +342,7 @@ function DetailPanel({
   const actions = NEXT_ACTIONS[appt.status] ?? [];
 
   return (
-    <aside className="flex w-80 shrink-0 flex-col border-l border-line bg-surface">
+    <aside className="fixed inset-0 z-50 flex flex-col bg-surface md:static md:z-auto md:w-80 md:shrink-0 md:border-l md:border-line">
       <div className="flex items-center justify-between border-b border-line px-5 py-4">
         <h2 className="font-medium">Detalle de la cita</h2>
         <button

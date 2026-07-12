@@ -49,3 +49,19 @@ body {
   scrollbar-width: thin;
   scrollbar-color: var(--color-line-strong) transparent;
 }
+
+/* iOS hace zoom automático si un input tiene fuente < 16px.
+   En pantallas táctiles pequeñas forzamos 16px y evitamos el salto. */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Scroll horizontal suave con inercia en móvil */
+.overflow-auto,
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}

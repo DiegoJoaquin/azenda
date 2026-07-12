@@ -10,9 +10,11 @@ export default function AdminLayout({
   return (
     <ClientGate>
       <CloudGate>
-        <div className="flex min-h-screen">
+        <div className="flex h-dvh">
           <AdminNav />
-          <main className="min-w-0 flex-1">{children}</main>
+          <main className="min-w-0 flex-1 overflow-auto pb-14 md:pb-0">
+            {children}
+          </main>
         </div>
       </CloudGate>
     </ClientGate>

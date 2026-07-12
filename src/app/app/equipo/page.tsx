@@ -26,7 +26,7 @@ export default function EquipoPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="flex items-center justify-between border-b border-line bg-surface px-8 py-4">
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-surface px-4 py-4 md:px-8">
         <div>
           <h1 className="font-serif text-2xl tracking-tight">Equipo</h1>
           <p className="text-sm text-ink-faint">
@@ -41,7 +41,7 @@ export default function EquipoPage() {
         </button>
       </header>
 
-      <div className="mx-auto max-w-4xl space-y-6 px-8 py-10">
+      <div className="mx-auto max-w-4xl space-y-6 px-4 py-6 md:px-8 md:py-10">
         {activeStaff.map((st) => {
           const services = db.staffServices
             .filter((ss) => ss.staffId === st.id)
@@ -58,7 +58,7 @@ export default function EquipoPage() {
               key={st.id}
               className="overflow-hidden rounded-lg border border-line bg-surface"
             >
-              <div className="flex items-center justify-between border-b border-line px-6 py-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-4 md:px-6">
                 <div className="flex items-center gap-3">
                   <span
                     className="flex h-10 w-10 items-center justify-center rounded-full font-medium text-white"

@@ -36,9 +36,13 @@ export default function ClientesPage() {
   );
 
   return (
-    <div className="flex h-screen">
-      {/* Lista */}
-      <div className="flex w-96 shrink-0 flex-col border-r border-line">
+    <div className="flex h-full">
+      {/* Lista (en móvil se oculta cuando hay ficha abierta) */}
+      <div
+        className={`${
+          selected ? "hidden md:flex" : "flex"
+        } w-full shrink-0 flex-col border-line md:w-96 md:border-r`}
+      >
         <header className="border-b border-line bg-surface px-6 py-4">
           <h1 className="font-serif text-2xl tracking-tight">Clientes</h1>
           <p className="text-sm text-ink-faint">
@@ -84,14 +88,20 @@ export default function ClientesPage() {
         </div>
       </div>
 
-      {/* Ficha */}
-      <div className="flex-1 overflow-auto">
+      {/* Ficha (en móvil ocupa toda la pantalla) */}
+      <div className={`${selected ? "block" : "hidden md:block"} flex-1 overflow-auto`}>
         {!selected ? (
           <div className="flex h-full items-center justify-center text-sm text-ink-faint">
             Selecciona un cliente para ver su ficha.
           </div>
         ) : (
-          <div className="mx-auto max-w-2xl px-8 py-10">
+          <div className="mx-auto max-w-2xl px-4 py-6 md:px-8 md:py-10">
+            <button
+              onClick={() => setSelectedId(null)}
+              className="mb-4 text-sm text-ink-soft md:hidden"
+            >
+              ← Volver a clientes
+            </button>
             <h2 className="font-serif text-3xl tracking-tight">{selected.name}</h2>
             <p className="mt-1 text-sm text-ink-soft">
               {selected.email} · {selected.phone}

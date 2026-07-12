@@ -242,7 +242,7 @@ export default function OnboardingPage() {
                   siguiente paso.
                 </span>
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid gap-3 sm:grid-cols-2">
                 <label className="block">
                   <span className="mb-1.5 block text-sm text-ink-soft">
                     Teléfono
@@ -294,8 +294,8 @@ export default function OnboardingPage() {
               Sugeridos para {VERTICAL_LABEL[vertical].toLowerCase()}. Edita
               duración y precio, borra lo que no aplique o agrega los tuyos.
             </p>
-            <div className="mt-6 overflow-hidden rounded-lg border border-line bg-surface">
-              <table className="w-full text-sm">
+            <div className="mt-6 overflow-x-auto rounded-lg border border-line bg-surface">
+              <table className="w-full min-w-[460px] text-sm">
                 <thead>
                   <tr className="border-b border-line bg-paper text-left text-xs text-ink-faint">
                     <th className="px-4 py-2.5 font-normal">Servicio</th>
@@ -514,7 +514,7 @@ export default function OnboardingPage() {
                   className="h-4 w-4 accent-sage"
                 />
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid gap-3 sm:grid-cols-2">
                 <label className="block">
                   <span className="mb-1.5 block text-sm text-ink-soft">
                     Anticipación mínima (minutos)

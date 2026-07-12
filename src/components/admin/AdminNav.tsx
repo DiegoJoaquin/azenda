@@ -22,7 +22,30 @@ export default function AdminNav() {
   const base = isDemo ? "/demo" : "/app";
 
   return (
-    <aside className="sticky top-0 flex h-screen w-56 shrink-0 flex-col border-r border-line bg-surface">
+    <>
+      {/* Barra inferior (móvil): patrón de app nativa */}
+      <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] md:hidden">
+        {NAV.map((item) => {
+          const href = `${base}${item.suffix}`;
+          const active =
+            item.suffix === "" ? pathname === base : pathname.startsWith(href);
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] ${
+                active ? "font-medium text-sage-deep" : "text-ink-faint"
+              }`}
+            >
+              <span className="text-sm leading-none">{item.icon}</span>
+              {item.label === "Configuración" ? "Ajustes" : item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Sidebar (escritorio) */}
+      <aside className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col border-r border-line bg-surface md:flex">
       <div className="border-b border-line px-5 py-5">
         <Link href="/" className="font-serif text-lg tracking-tight">
           Azenda
@@ -79,6 +102,7 @@ export default function AdminNav() {
           </button>
         )}
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }
