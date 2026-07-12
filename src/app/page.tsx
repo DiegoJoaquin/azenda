@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { whatsappLink, TRIAL_DAYS } from "@/lib/config";
+import { emailLink, TRIAL_DAYS } from "@/lib/config";
 
 const FEATURES = [
   {
@@ -77,8 +77,11 @@ const PLANS = [
       "Permisos por rol",
       "Soporte prioritario",
     ],
-    cta: "Hablemos por WhatsApp",
-    href: whatsappLink("Hola, me interesa el plan Empresa de Azenda."),
+    cta: "Escríbenos",
+    href: emailLink(
+      "Plan Empresa — Azenda",
+      "Hola, me interesa el plan Empresa de Azenda."
+    ),
     highlight: false,
   },
 ];

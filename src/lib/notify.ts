@@ -7,6 +7,7 @@
 //   RESEND_FROM                — remitente, ej: "Azenda <hola@tudominio.cl>"
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { CONTACT_EMAIL } from "./config";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -22,6 +23,7 @@ interface ProcessResult {
   enqueuedReminders?: number;
   sent?: number;
   failed?: number;
+  ownerDigest?: boolean;
 }
 
 export async function processOutbox(opts: {
@@ -33,6 +35,19 @@ export async function processOutbox(opts: {
   if (!process.env.RESEND_API_KEY) return { skipped: "sin RESEND_API_KEY" };
 
   let enqueuedReminders = 0;
+  let ownerDigest = false;
+
+  // 0. Resumen comercial diario para el dueño de la plataforma (Diego):
+  //    negocios nuevos, pruebas por vencer y pruebas recién vencidas.
+  //    Va a CONTACT_EMAIL — con Resend gratis funciona incluso sin dominio
+  //    verificado, porque es tu propia casilla.
+  if (opts.enqueueReminders) {
+    try {
+      ownerDigest = await sendOwnerDigest(sb);
+    } catch (e) {
+      console.error("[notify] ownerDigest:", e);
+    }
+  }
 
   // 1. Encolar recordatorios para citas confirmadas de las próximas 20–30 h
   if (opts.enqueueReminders) {
@@ -102,7 +117,93 @@ export async function processOutbox(opts: {
     }
   }
 
-  return { enqueuedReminders, sent, failed };
+  return { enqueuedReminders, sent, failed, ownerDigest };
+}
+
+// Resumen diario para el dueño de la plataforma: quién se registró, a quién
+// se le vence la prueba (para escribirle antes de que se bloquee) y a quién
+// se le venció (para cobrar/activar).
+async function sendOwnerDigest(sb: SupabaseClient): Promise<boolean> {
+  const now = Date.now();
+  const in48h = new Date(now + 48 * 3600_000).toISOString();
+  const ago24h = new Date(now - 24 * 3600_000).toISOString();
+  const nowIso = new Date(now).toISOString();
+
+  const [nuevos, porVencer, vencidos] = await Promise.all([
+    sb.from("businesses")
+      .select("name, slug, phone")
+      .gte("created_at", ago24h),
+    sb.from("businesses")
+      .select("name, slug, phone, trial_ends_at")
+      .eq("plan_status", "trial")
+      .gte("trial_ends_at", nowIso)
+      .lte("trial_ends_at", in48h),
+    sb.from("businesses")
+      .select("name, slug, phone, trial_ends_at")
+      .eq("plan_status", "trial")
+      .gte("trial_ends_at", ago24h)
+      .lt("trial_ends_at", nowIso),
+  ]);
+
+  const secciones: string[] = [];
+  const lista = (rows: any[] | null, extra?: (r: any) => string) =>
+    (rows ?? [])
+      .map(
+        (r) =>
+          `<li><strong>${escapeHtml(r.name)}</strong> (azenda.cl/${r.slug})` +
+          `${r.phone ? " · " + escapeHtml(r.phone) : ""}${extra ? extra(r) : ""}</li>`
+      )
+      .join("");
+
+  if (nuevos.data && nuevos.data.length > 0) {
+    secciones.push(
+      `<p><strong>🆕 Negocios nuevos (últimas 24 h):</strong></p><ul>${lista(nuevos.data)}</ul>`
+    );
+  }
+  if (porVencer.data && porVencer.data.length > 0) {
+    secciones.push(
+      `<p><strong>⏳ Pruebas que vencen en 48 h</strong> (buen momento para escribirles):</p><ul>${lista(
+        porVencer.data
+      )}</ul>`
+    );
+  }
+  if (vencidos.data && vencidos.data.length > 0) {
+    secciones.push(
+      `<p><strong>🔒 Pruebas vencidas ayer</strong> (su panel quedó bloqueado; esperan activación):</p><ul>${lista(
+        vencidos.data
+      )}</ul>`
+    );
+  }
+
+  if (secciones.length === 0) return false; // nada que reportar, no enviar
+
+  const html = `
+  <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; color: #1f1d1a; font-size: 14px;">
+    <p style="font-family: Georgia, serif; font-size: 20px;">Azenda — resumen del día</p>
+    ${secciones.join("")}
+    <p style="font-size: 12px; color: #8a857c;">
+      Para activar una cuenta: Supabase → Table Editor → businesses →
+      cambiar plan_status a "active".
+    </p>
+  </div>`;
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: process.env.RESEND_FROM ?? "Azenda <onboarding@resend.dev>",
+      to: [CONTACT_EMAIL],
+      subject: "Azenda — negocios nuevos y pruebas por vencer",
+      html,
+    }),
+  });
+  if (!res.ok) {
+    throw new Error(`Resend ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  }
+  return true;
 }
 
 interface Detail {

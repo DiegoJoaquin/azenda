@@ -14,7 +14,7 @@ import {
 } from "@/lib/cloud";
 import { setCloudSnapshot, setMyRole, useDB } from "@/lib/store";
 import { isBusinessLocked } from "@/lib/types";
-import { whatsappLink, TRIAL_DAYS } from "@/lib/config";
+import { emailLink, TRIAL_DAYS } from "@/lib/config";
 
 type State = "cargando" | "listo" | "bloqueado";
 
@@ -93,11 +93,10 @@ function TrialBanner() {
         .
       </span>
       <a
-        href={whatsappLink(
-          `Hola, quiero activar mi cuenta de Azenda para "${b.name}".`
+        href={emailLink(
+          `Activar cuenta Azenda — ${b.name}`,
+          `Hola, quiero activar mi cuenta de Azenda para "${b.name}". Envíenme los datos para transferir, por favor.`
         )}
-        target="_blank"
-        rel="noopener noreferrer"
         className="font-medium text-sage hover:underline"
       >
         Activar mi cuenta →
@@ -129,20 +128,19 @@ function LockedScreen() {
         <div className="mx-auto mt-8 max-w-sm rounded-lg border border-line bg-surface px-6 py-5 text-left text-sm text-ink-soft">
           <p className="font-medium text-ink">¿Cómo se activa?</p>
           <ol className="mt-2 list-decimal space-y-1 pl-5">
-            <li>Nos escribes por WhatsApp.</li>
+            <li>Nos escribes por correo.</li>
             <li>Te enviamos los datos para transferir tu plan mensual.</li>
             <li>Confirmado el pago, tu cuenta queda activa al instante.</li>
           </ol>
         </div>
         <a
-          href={whatsappLink(
-            `Hola, quiero activar mi cuenta de Azenda para "${b.name}".`
+          href={emailLink(
+            `Activar cuenta Azenda — ${b.name}`,
+            `Hola, quiero activar mi cuenta de Azenda para "${b.name}". Envíenme los datos para transferir, por favor.`
           )}
-          target="_blank"
-          rel="noopener noreferrer"
           className="mt-8 inline-block rounded-md bg-sage px-8 py-3.5 text-sm font-medium text-white transition-colors hover:bg-sage-deep"
         >
-          Activar por WhatsApp
+          Activar por correo
         </a>
         <div className="mt-6">
           <button
