@@ -9,10 +9,10 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import {
   fetchAdminSnapshot,
-  fetchMyBusinessId,
+  fetchMyMembership,
   getSession,
 } from "@/lib/cloud";
-import { setCloudSnapshot, useDB } from "@/lib/store";
+import { setCloudSnapshot, setMyRole, useDB } from "@/lib/store";
 import { isBusinessLocked } from "@/lib/types";
 import { whatsappLink, TRIAL_DAYS } from "@/lib/config";
 
@@ -35,13 +35,14 @@ export default function CloudGate({
           router.replace("/login");
           return;
         }
-        const businessId = await fetchMyBusinessId();
-        if (!businessId) {
+        const membership = await fetchMyMembership();
+        if (!membership) {
           router.replace("/onboarding");
           return;
         }
-        const db = await fetchAdminSnapshot(businessId);
+        const db = await fetchAdminSnapshot(membership.businessId);
         if (cancelled) return;
+        setMyRole(membership.role);
         setCloudSnapshot(db);
         setState(isBusinessLocked(db.business) ? "bloqueado" : "listo");
       } catch (e) {

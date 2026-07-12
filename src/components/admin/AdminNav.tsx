@@ -2,30 +2,34 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useDB } from "@/lib/store";
+import { useDB, useMyRole } from "@/lib/store";
 import { supabase } from "@/lib/supabase";
 
 const NAV = [
-  { suffix: "", label: "Agenda", icon: "▤" },
-  { suffix: "/clientes", label: "Clientes", icon: "◑" },
-  { suffix: "/servicios", label: "Servicios", icon: "✂" },
-  { suffix: "/equipo", label: "Equipo", icon: "❖" },
-  { suffix: "/finanzas", label: "Finanzas", icon: "◈" },
-  { suffix: "/configuracion", label: "Configuración", icon: "◎" },
+  { suffix: "", label: "Agenda", icon: "▤", adminOnly: false },
+  { suffix: "/clientes", label: "Clientes", icon: "◑", adminOnly: false },
+  { suffix: "/servicios", label: "Servicios", icon: "✂", adminOnly: false },
+  { suffix: "/equipo", label: "Equipo", icon: "❖", adminOnly: false },
+  { suffix: "/finanzas", label: "Finanzas", icon: "◈", adminOnly: true },
+  { suffix: "/configuracion", label: "Configuración", icon: "◎", adminOnly: true },
 ];
 
 export default function AdminNav() {
   const pathname = usePathname();
   const router = useRouter();
   const db = useDB();
+  const role = useMyRole();
   const isDemo = pathname.startsWith("/demo");
   const base = isDemo ? "/demo" : "/app";
+  // RBAC de interfaz: el rol "staff" no ve finanzas ni configuración
+  // (el enforcement duro está en las políticas RLS de la base).
+  const nav = NAV.filter((item) => !item.adminOnly || role !== "staff");
 
   return (
     <>
       {/* Barra inferior (móvil): patrón de app nativa */}
       <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] md:hidden">
-        {NAV.map((item) => {
+        {nav.map((item) => {
           const href = `${base}${item.suffix}`;
           const active =
             item.suffix === "" ? pathname === base : pathname.startsWith(href);
@@ -56,7 +60,7 @@ export default function AdminNav() {
       </div>
 
       <nav className="flex-1 space-y-0.5 px-3 py-4">
-        {NAV.map((item) => {
+        {nav.map((item) => {
           const href = `${base}${item.suffix}`;
           const active =
             item.suffix === "" ? pathname === base : pathname.startsWith(href);

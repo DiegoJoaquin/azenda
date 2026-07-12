@@ -119,12 +119,21 @@ export async function getSession() {
 }
 
 export async function fetchMyBusinessId(): Promise<string | null> {
+  const m = await fetchMyMembership();
+  return m?.businessId ?? null;
+}
+
+export async function fetchMyMembership(): Promise<{
+  businessId: string;
+  role: "owner" | "admin" | "staff";
+} | null> {
   const { data, error } = await supabase()
     .from("memberships")
-    .select("business_id")
+    .select("business_id, role")
     .limit(1);
   if (error) throw error;
-  return data?.[0]?.business_id ?? null;
+  if (!data?.[0]) return null;
+  return { businessId: data[0].business_id, role: data[0].role };
 }
 
 // ---------- Snapshot del panel (miembro autenticado) ----------

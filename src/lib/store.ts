@@ -36,6 +36,25 @@ export function getMode(): Mode {
   return mode;
 }
 
+// ---------- Rol del usuario actual (RBAC en la interfaz) ----------
+// El enforcement real está en las políticas RLS; esto solo adapta la UI.
+
+export type MemberRole = "owner" | "admin" | "staff";
+let myRole: MemberRole = "owner"; // demo: siempre dueño
+
+export function setMyRole(role: MemberRole) {
+  myRole = role;
+  listeners.forEach((l) => l());
+}
+
+export function useMyRole(): MemberRole {
+  return useSyncExternalStore(
+    subscribe,
+    () => myRole,
+    () => myRole
+  );
+}
+
 /** Activa el modo demo (rutas /demo y /aura-estudio). Idempotente. */
 export function ensureDemoMode() {
   if (mode !== "demo") {
@@ -358,6 +377,9 @@ export async function submitBooking(req: BookingRequest): Promise<BookingResult>
           });
         }
       });
+      // Empujar la cola para que la confirmación por correo salga al tiro
+      // (el trigger de la base ya la encoló). Fire-and-forget.
+      void fetch("/api/notifications/kick", { method: "POST" }).catch(() => {});
       return { ok: true, appt: buildAppt(apptId) };
     } catch (e) {
       if (e instanceof Error) {

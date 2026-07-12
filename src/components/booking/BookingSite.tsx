@@ -384,6 +384,13 @@ export default function BookingSite({ slug }: { slug: string }) {
             <p className="mt-2 text-sm text-ink-soft">
               Duración total: {fmtDuration(totalMin)} · Disponibilidad en tiempo real.
             </p>
+            {typeof Intl !== "undefined" &&
+              Intl.DateTimeFormat().resolvedOptions().timeZone !== biz.timezone && (
+                <p className="mt-3 rounded-md bg-info-tint px-4 py-2.5 text-sm text-info">
+                  Estás en una zona horaria distinta a la del negocio (
+                  {biz.timezone}); verifica la hora antes de confirmar.
+                </p>
+              )}
 
             {/* Selector de día: próximos 14 días */}
             <div className="mt-8 flex gap-2 overflow-x-auto pb-2">
