@@ -277,7 +277,18 @@ export async function rpcBookAppointment(args: {
     })),
   });
   if (error) {
-    if (error.message.includes("SLOT_TAKEN")) throw new Error("SLOT_TAKEN");
+    // Códigos de negocio que lanza la función SQL blindada
+    for (const code of [
+      "SLOT_TAKEN",
+      "BOOKING_LIMIT",
+      "BOOKING_RATE",
+      "BOOKING_PAUSED",
+      "INVALID_INPUT",
+      "INVALID_SERVICE",
+      "INVALID_STAFF",
+    ]) {
+      if (error.message.includes(code)) throw new Error(code);
+    }
     throw error;
   }
   return data as string;

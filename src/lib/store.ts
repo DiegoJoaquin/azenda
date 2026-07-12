@@ -298,7 +298,7 @@ export interface BookingRequest {
 
 export type BookingResult =
   | { ok: true; appt: Appointment }
-  | { ok: false; error: "SLOT_TAKEN" | "UNKNOWN" };
+  | { ok: false; error: "SLOT_TAKEN" | "LIMIT" | "PAUSED" | "UNKNOWN" };
 
 export async function submitBooking(req: BookingRequest): Promise<BookingResult> {
   const db = load();
@@ -360,8 +360,12 @@ export async function submitBooking(req: BookingRequest): Promise<BookingResult>
       });
       return { ok: true, appt: buildAppt(apptId) };
     } catch (e) {
-      if (e instanceof Error && e.message === "SLOT_TAKEN") {
-        return { ok: false, error: "SLOT_TAKEN" };
+      if (e instanceof Error) {
+        if (e.message === "SLOT_TAKEN") return { ok: false, error: "SLOT_TAKEN" };
+        if (e.message === "BOOKING_LIMIT" || e.message === "BOOKING_RATE") {
+          return { ok: false, error: "LIMIT" };
+        }
+        if (e.message === "BOOKING_PAUSED") return { ok: false, error: "PAUSED" };
       }
       console.error("[submitBooking]", e);
       return { ok: false, error: "UNKNOWN" };

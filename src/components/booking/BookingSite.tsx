@@ -134,6 +134,10 @@ export default function BookingSite({ slug }: { slug: string }) {
       setError("Completa tu nombre, correo y teléfono para confirmar.");
       return;
     }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim())) {
+      setError("El correo no parece válido. Revísalo, por favor.");
+      return;
+    }
     // Re-validación local del slot; la validación definitiva la hace el
     // servidor (RPC transaccional) en modo real.
     const fresh = getAvailableSlots(db, day, selections).find(
@@ -163,6 +167,12 @@ export default function BookingSite({ slug }: { slug: string }) {
         setError("Ese horario acaba de ser tomado. Elige otro, por favor.");
         setStep("horario");
         setSlot(null);
+      } else if (result.error === "LIMIT") {
+        setError(
+          "Ya tienes el máximo de reservas activas en este negocio. Si necesitas cambiar una, contáctalos directamente."
+        );
+      } else if (result.error === "PAUSED") {
+        setError("Las reservas online de este negocio están pausadas en este momento.");
       } else {
         setError("No pudimos completar la reserva. Inténtalo de nuevo en unos segundos.");
       }
