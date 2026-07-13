@@ -121,6 +121,18 @@ export default function RegistroPage() {
                 </button>
               </form>
 
+              <p className="mt-4 text-center text-xs leading-relaxed text-ink-faint">
+                Al crear tu cuenta aceptas los{" "}
+                <Link href="/terminos" className="text-sage hover:underline">
+                  Términos y Condiciones
+                </Link>{" "}
+                y la{" "}
+                <Link href="/privacidad" className="text-sage hover:underline">
+                  Política de Privacidad
+                </Link>
+                .
+              </p>
+
               <p className="mt-6 text-center text-sm text-ink-soft">
                 ¿Ya tienes cuenta?{" "}
                 <Link href="/login" className="text-sage hover:underline">

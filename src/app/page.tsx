@@ -282,9 +282,14 @@ export default function Home() {
               Agenda online para negocios de servicios.
             </p>
           </div>
-          <p className="text-sm text-ink-faint">
-            Demo — los datos son de ejemplo y viven en tu navegador.
-          </p>
+          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink-faint">
+            <Link href="/terminos" className="hover:text-ink">
+              Términos y Condiciones
+            </Link>
+            <Link href="/privacidad" className="hover:text-ink">
+              Política de Privacidad
+            </Link>
+          </nav>
         </div>
       </footer>
     </div>
