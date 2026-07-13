@@ -5,7 +5,7 @@
 export const TRIAL_DAYS = 7;
 
 // Contacto del dueño de la plataforma (Diego) para activaciones y soporte.
-export const CONTACT_EMAIL = "frediazll@gmail.com";
+export const CONTACT_EMAIL = "diazdiego011@gmail.com";
 export const CONTACT_WHATSAPP = "56933278938"; // formato internacional sin "+"
 
 export function whatsappLink(message: string): string {
