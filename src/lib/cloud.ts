@@ -205,11 +205,18 @@ export async function fetchAdminSnapshot(businessId: string): Promise<DB> {
 
 // ---------- Snapshot público (mini-sitio de reservas, anónimo) ----------
 
+// Columnas públicas de businesses (anon no puede leer plan_status ni
+// trial_ends_at; el mini-sitio no las necesita — ver migración 0005).
+const PUBLIC_BUSINESS_COLS =
+  "id, slug, name, vertical, description, phone, address, timezone, " +
+  "online_booking_enabled, requires_approval, min_lead_minutes, " +
+  "max_lead_days, cancellation_hours, slot_granularity_min";
+
 export async function fetchPublicSnapshot(slug: string): Promise<DB | null> {
   const sb = supabase();
   const { data: bizRow, error } = await sb
     .from("businesses")
-    .select("*")
+    .select(PUBLIC_BUSINESS_COLS)
     .eq("slug", slug)
     .maybeSingle();
   if (error) throw error;

@@ -88,6 +88,12 @@ export default function LoginPage() {
             </button>
           </form>
 
+          <p className="mt-4 text-center text-sm">
+            <Link href="/recuperar" className="text-ink-faint hover:text-ink">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </p>
+
           <p className="mt-6 text-center text-sm text-ink-soft">
             ¿Aún no tienes cuenta?{" "}
             <Link href="/registro" className="text-sage hover:underline">

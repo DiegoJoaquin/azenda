@@ -13,10 +13,28 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const SITE_URL = "https://azenda-nu.vercel.app";
+const DESC =
+  "Reservas online, agenda por profesional y gestión de clientes en una sola plataforma, adaptada a tu rubro.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Azenda — Agenda online y gestión para negocios de servicios",
-  description:
-    "Reservas online, agenda por profesional y gestión de clientes en una sola plataforma, adaptada a tu rubro.",
+  description: DESC,
+  openGraph: {
+    title: "Azenda — Tu agenda ordenada, tus horas reservadas solas",
+    description: DESC,
+    url: SITE_URL,
+    siteName: "Azenda",
+    locale: "es_CL",
+    type: "website",
+    images: [{ url: "/icon-512.png", width: 512, height: 512, alt: "Azenda" }],
+  },
+  twitter: {
+    card: "summary",
+    title: "Azenda — Agenda online para negocios de servicios",
+    description: DESC,
+  },
   manifest: "/manifest.webmanifest",
   icons: {
     apple: "/apple-touch-icon.png",

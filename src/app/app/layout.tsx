@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import AdminNav from "@/components/admin/AdminNav";
 import ClientGate from "@/components/ClientGate";
 import CloudGate from "@/components/admin/CloudGate";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default function AdminLayout({
   children,
