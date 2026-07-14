@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useDB, updateBusiness, resetDemo } from "@/lib/store";
 import { VERTICAL_LABEL } from "@/lib/types";
+import LogoUploader from "@/components/admin/LogoUploader";
 
 export default function ConfiguracionPage() {
   const db = useDB();
@@ -78,6 +79,16 @@ export default function ConfiguracionPage() {
             Negocio
           </h2>
           <div className="space-y-4 px-6 py-5">
+            <div>
+              <span className="mb-1.5 block text-sm text-ink-soft">Logo</span>
+              <LogoUploader
+                value={b.logoUrl}
+                businessName={b.name}
+                onChange={(dataUrl) =>
+                  updateBusiness({ logoUrl: dataUrl ?? "" })
+                }
+              />
+            </div>
             <label className="block">
               <span className="mb-1.5 block text-sm text-ink-soft">Nombre</span>
               <input

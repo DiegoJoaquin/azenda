@@ -18,6 +18,7 @@ import { VERTICAL_PRESETS, slugify } from "@/lib/verticals";
 import { VERTICAL_LABEL, type Vertical } from "@/lib/types";
 import { TRIAL_DAYS } from "@/lib/config";
 import { fmtCLP } from "@/lib/dates";
+import LogoUploader from "@/components/admin/LogoUploader";
 
 const PALETTE = ["#3f5c4b", "#b0713f", "#3d5568", "#7a5b7d", "#8a6d3b", "#4f6d7a"];
 
@@ -58,6 +59,7 @@ export default function OnboardingPage() {
 
   // Paso 1
   const [name, setName] = useState("");
+  const [logo, setLogo] = useState<string | null>(null);
   const [vertical, setVertical] = useState<Vertical>("peluqueria");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
@@ -191,6 +193,7 @@ export default function OnboardingPage() {
         requiresApproval,
         minLeadMinutes: minLead,
         cancellationHours: cancelHours,
+        ...(logo ? { logoUrl: logo } : {}),
       });
       router.replace("/app");
     } catch (e) {
@@ -239,6 +242,16 @@ export default function OnboardingPage() {
               Cuéntanos de tu negocio
             </h1>
             <div className="mt-8 space-y-4">
+              <div>
+                <span className="mb-1.5 block text-sm text-ink-soft">
+                  Logo (opcional)
+                </span>
+                <LogoUploader
+                  value={logo ?? undefined}
+                  businessName={name}
+                  onChange={setLogo}
+                />
+              </div>
               <label className="block">
                 <span className="mb-1.5 block text-sm text-ink-soft">
                   Nombre del negocio

@@ -191,9 +191,18 @@ export default function BookingSite({ slug }: { slug: string }) {
       <header className="border-b border-line bg-surface">
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sage font-serif text-sm text-white">
-              {biz.name.slice(0, 1)}
-            </div>
+            {biz.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={biz.logoUrl}
+                alt={biz.name}
+                className="h-9 w-9 rounded-full border border-line object-cover"
+              />
+            ) : (
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sage font-serif text-sm text-white">
+                {biz.name.slice(0, 1)}
+              </div>
+            )}
             <div>
               <p className="text-sm font-medium leading-tight">{biz.name}</p>
               <p className="text-xs text-ink-faint">{biz.address.split(",")[1]}</p>
@@ -232,6 +241,14 @@ export default function BookingSite({ slug }: { slug: string }) {
         {/* ---------- Paso 0: landing del negocio ---------- */}
         {step === "inicio" && (
           <div className="pt-16">
+            {biz.logoUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={biz.logoUrl}
+                alt={biz.name}
+                className="mb-6 h-20 w-20 rounded-2xl border border-line object-cover shadow-sm"
+              />
+            )}
             <p className="text-sm uppercase tracking-[0.2em] text-sage">
               Reserva online
             </p>

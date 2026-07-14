@@ -40,6 +40,7 @@ export interface Business {
   slotGranularityMin: number;
   planStatus: PlanStatus;
   trialEndsAt: string; // ISO
+  logoUrl?: string; // data URL o URL del logo
 }
 
 export interface Staff {

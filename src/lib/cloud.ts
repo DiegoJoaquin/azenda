@@ -41,6 +41,7 @@ function mapBusiness(r: any): Business {
     slotGranularityMin: r.slot_granularity_min,
     planStatus: r.plan_status ?? "active",
     trialEndsAt: r.trial_ends_at ?? "2099-01-01T00:00:00",
+    logoUrl: r.logo_url ?? undefined,
   };
 }
 
@@ -210,7 +211,7 @@ export async function fetchAdminSnapshot(businessId: string): Promise<DB> {
 const PUBLIC_BUSINESS_COLS =
   "id, slug, name, vertical, description, phone, address, timezone, " +
   "online_booking_enabled, requires_approval, min_lead_minutes, " +
-  "max_lead_days, cancellation_hours, slot_granularity_min";
+  "max_lead_days, cancellation_hours, slot_granularity_min, logo_url";
 
 export async function fetchPublicSnapshot(slug: string): Promise<DB | null> {
   const sb = supabase();
@@ -481,6 +482,7 @@ export function cloudUpdateClientNotes(id: string, notes: string) {
 export function cloudUpdateBusiness(id: string, patch: Partial<Business>) {
   const row: Record<string, unknown> = {};
   if (patch.name !== undefined) row.name = patch.name;
+  if (patch.logoUrl !== undefined) row.logo_url = patch.logoUrl;
   if (patch.description !== undefined) row.description = patch.description;
   if (patch.phone !== undefined) row.phone = patch.phone;
   if (patch.address !== undefined) row.address = patch.address;
