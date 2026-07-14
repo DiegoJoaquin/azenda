@@ -14,7 +14,8 @@ import {
 } from "@/lib/cloud";
 import { setCloudSnapshot, setMyRole, useDB } from "@/lib/store";
 import { isBusinessLocked } from "@/lib/types";
-import { emailLink, TRIAL_DAYS } from "@/lib/config";
+import { TRIAL_DAYS } from "@/lib/config";
+import ActivateDialog from "@/components/admin/ActivateDialog";
 
 type State = "cargando" | "listo" | "bloqueado";
 
@@ -78,6 +79,7 @@ export default function CloudGate({
 function TrialBanner() {
   const db = useDB();
   const b = db.business;
+  const [open, setOpen] = useState(false);
   if (b.planStatus !== "trial") return null;
   const daysLeft = Math.max(
     0,
@@ -92,15 +94,15 @@ function TrialBanner() {
         </strong>
         .
       </span>
-      <a
-        href={emailLink(
-          `Activar cuenta Azenda — ${b.name}`,
-          `Hola, quiero activar mi cuenta de Azenda para "${b.name}". Envíenme los datos para transferir, por favor.`
-        )}
+      <button
+        onClick={() => setOpen(true)}
         className="font-medium text-sage hover:underline"
       >
         Activar mi cuenta →
-      </a>
+      </button>
+      {open && (
+        <ActivateDialog businessName={b.name} onClose={() => setOpen(false)} />
+      )}
     </div>
   );
 }
@@ -110,6 +112,7 @@ function LockedScreen() {
   const router = useRouter();
   const b = db.business;
   const suspended = b.planStatus === "suspended";
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen items-center justify-center px-6">
@@ -133,15 +136,12 @@ function LockedScreen() {
             <li>Confirmado el pago, tu cuenta queda activa al instante.</li>
           </ol>
         </div>
-        <a
-          href={emailLink(
-            `Activar cuenta Azenda — ${b.name}`,
-            `Hola, quiero activar mi cuenta de Azenda para "${b.name}". Envíenme los datos para transferir, por favor.`
-          )}
+        <button
+          onClick={() => setOpen(true)}
           className="mt-8 inline-block rounded-md bg-sage px-8 py-3.5 text-sm font-medium text-white transition-colors hover:bg-sage-deep"
         >
-          Activar por correo
-        </a>
+          Activar mi cuenta
+        </button>
         <div className="mt-6">
           <button
             onClick={async () => {
@@ -154,6 +154,9 @@ function LockedScreen() {
           </button>
         </div>
       </div>
+      {open && (
+        <ActivateDialog businessName={b.name} onClose={() => setOpen(false)} />
+      )}
     </div>
   );
 }

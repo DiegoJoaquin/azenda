@@ -339,7 +339,9 @@ export async function seedBusinessData(
   businessId: string,
   categories: { id: string; name: string; sortOrder: number }[],
   services: (Service & { staffIds: string[] })[],
-  staff: (Staff & { weekdays: number[]; start: string; end: string })[]
+  staff: (Staff & {
+    schedule: { weekday: number; start: string; end: string }[];
+  })[]
 ) {
   const sb = supabase();
 
@@ -386,12 +388,12 @@ export async function seedBusinessData(
   if (e3) throw e3;
 
   const schedRows = staff.flatMap((st) =>
-    st.weekdays.map((weekday) => ({
+    st.schedule.map((slot) => ({
       business_id: businessId,
       staff_id: st.id,
-      weekday,
-      start_time: st.start,
-      end_time: st.end,
+      weekday: slot.weekday,
+      start_time: slot.start,
+      end_time: slot.end,
     }))
   );
   if (schedRows.length > 0) {

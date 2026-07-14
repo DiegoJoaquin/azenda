@@ -19,7 +19,6 @@ import { VERTICAL_LABEL, type Vertical } from "@/lib/types";
 import { TRIAL_DAYS } from "@/lib/config";
 import { fmtCLP } from "@/lib/dates";
 
-const WEEKDAYS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 const PALETTE = ["#3f5c4b", "#b0713f", "#3d5568", "#7a5b7d", "#8a6d3b", "#4f6d7a"];
 
 interface SvcRow {
@@ -35,6 +34,17 @@ interface StaffRow {
   name: string;
   title: string;
 }
+
+interface DayHours {
+  weekday: number; // 0 domingo … 6 sábado
+  open: boolean;
+  start: string;
+  end: string;
+}
+
+const DAY_LABELS = [
+  "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado",
+];
 
 const input =
   "w-full rounded-md border border-line bg-surface px-3.5 py-2.5 text-sm outline-none focus:border-sage";
@@ -58,11 +68,16 @@ export default function OnboardingPage() {
   const [services, setServices] = useState<SvcRow[]>([]);
   const [presetFor, setPresetFor] = useState<Vertical | null>(null);
 
-  // Paso 3
+  // Paso 3 — horario por día (cada día puede tener su propio rango)
   const [staff, setStaff] = useState<StaffRow[]>([{ name: "", title: "" }]);
-  const [days, setDays] = useState<number[]>([1, 2, 3, 4, 5]);
-  const [start, setStart] = useState("09:00");
-  const [end, setEnd] = useState("18:00");
+  const [hours, setHours] = useState<DayHours[]>(() =>
+    [0, 1, 2, 3, 4, 5, 6].map((weekday) => ({
+      weekday,
+      open: weekday >= 1 && weekday <= 5, // lun–vie por defecto
+      start: "09:00",
+      end: "18:00",
+    }))
+  );
 
   // Paso 4
   const [requiresApproval, setRequiresApproval] = useState(false);
@@ -106,10 +121,23 @@ export default function OnboardingPage() {
 
   async function create() {
     const validStaff = staff.filter((s) => s.name.trim());
+    const openDays = hours.filter((h) => h.open);
     if (services.length === 0) return setError("Agrega al menos un servicio.");
     if (validStaff.length === 0)
       return setError("Agrega al menos un profesional (puedes ser tú).");
-    if (days.length === 0) return setError("Elige los días de atención.");
+    if (openDays.length === 0)
+      return setError("Marca al menos un día de atención.");
+    for (const h of openDays) {
+      if (h.start >= h.end)
+        return setError(
+          `En ${DAY_LABELS[h.weekday]} la hora de cierre debe ser mayor a la de apertura.`
+        );
+    }
+    const schedule = openDays.map((h) => ({
+      weekday: h.weekday,
+      start: h.start,
+      end: h.end,
+    }));
 
     setCreating(true);
     setError("");
@@ -139,9 +167,7 @@ export default function OnboardingPage() {
         bookableOnline: true,
         active: true,
         sortOrder: i,
-        weekdays: days,
-        start,
-        end,
+        schedule, // mismo horario del negocio para cada profesional; se afina luego en Equipo
       }));
       const allStaffIds = staffRows.map((s) => s.id);
 
@@ -446,49 +472,84 @@ export default function OnboardingPage() {
               + Agregar otra persona
             </button>
 
-            <div className="mt-8">
-              <span className="mb-1.5 block text-sm text-ink-soft">
-                Días de atención
+            <div className="mt-10">
+              <span className="mb-1 block text-sm font-medium text-ink">
+                Horario de atención
               </span>
-              <div className="flex gap-1.5">
-                {WEEKDAYS.map((label, wd) => (
-                  <button
-                    key={wd}
-                    onClick={() =>
-                      setDays((p) =>
-                        p.includes(wd) ? p.filter((x) => x !== wd) : [...p, wd]
-                      )
-                    }
-                    className={`flex-1 rounded-md border py-2 text-xs transition-colors ${
-                      days.includes(wd)
-                        ? "border-sage bg-sage-tint font-medium"
-                        : "border-line bg-surface text-ink-faint"
-                    }`}
-                  >
-                    {label}
-                  </button>
-                ))}
+              <p className="mb-3 text-xs text-ink-faint">
+                Marca los días que atiendes y define el horario de cada uno. Puedes
+                poner un horario distinto por día (por ejemplo, sábados más corto).
+              </p>
+              <div className="overflow-hidden rounded-lg border border-line bg-surface">
+                {[1, 2, 3, 4, 5, 6, 0].map((wd) => {
+                  const h = hours.find((x) => x.weekday === wd)!;
+                  const setH = (patch: Partial<DayHours>) =>
+                    setHours((p) =>
+                      p.map((x) => (x.weekday === wd ? { ...x, ...patch } : x))
+                    );
+                  return (
+                    <div
+                      key={wd}
+                      className="flex items-center gap-3 border-b border-line px-3 py-2.5 last:border-0"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setH({ open: !h.open })}
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border text-xs ${
+                          h.open
+                            ? "border-sage bg-sage text-white"
+                            : "border-line-strong text-transparent"
+                        }`}
+                        aria-label={`Atiende ${DAY_LABELS[wd]}`}
+                      >
+                        ✓
+                      </button>
+                      <span
+                        className={`w-24 text-sm ${
+                          h.open ? "text-ink" : "text-ink-faint"
+                        }`}
+                      >
+                        {DAY_LABELS[wd]}
+                      </span>
+                      {h.open ? (
+                        <div className="flex flex-1 items-center gap-2">
+                          <input
+                            type="time"
+                            value={h.start}
+                            onChange={(e) => setH({ start: e.target.value })}
+                            className="rounded-md border border-line bg-paper px-2 py-1.5 text-sm outline-none focus:border-sage"
+                          />
+                          <span className="text-ink-faint">a</span>
+                          <input
+                            type="time"
+                            value={h.end}
+                            onChange={(e) => setH({ end: e.target.value })}
+                            className="rounded-md border border-line bg-paper px-2 py-1.5 text-sm outline-none focus:border-sage"
+                          />
+                        </div>
+                      ) : (
+                        <span className="flex-1 text-sm text-ink-faint">Cerrado</span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-            </div>
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              <label className="block">
-                <span className="mb-1.5 block text-sm text-ink-soft">Desde</span>
-                <input
-                  type="time"
-                  value={start}
-                  onChange={(e) => setStart(e.target.value)}
-                  className={input}
-                />
-              </label>
-              <label className="block">
-                <span className="mb-1.5 block text-sm text-ink-soft">Hasta</span>
-                <input
-                  type="time"
-                  value={end}
-                  onChange={(e) => setEnd(e.target.value)}
-                  className={input}
-                />
-              </label>
+              <button
+                type="button"
+                onClick={() => {
+                  // Copiar el horario del primer día abierto a todos los abiertos
+                  const first = hours.find((h) => h.open);
+                  if (first)
+                    setHours((p) =>
+                      p.map((h) =>
+                        h.open ? { ...h, start: first.start, end: first.end } : h
+                      )
+                    );
+                }}
+                className="mt-3 text-xs text-sage hover:underline"
+              >
+                Aplicar el mismo horario a todos los días abiertos
+              </button>
             </div>
           </section>
         )}
@@ -567,6 +628,20 @@ export default function OnboardingPage() {
                       {staff.filter((s) => s.name.trim()).length === 1
                         ? "profesional"
                         : "profesionales"}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt>Atención</dt>
+                    <dd className="text-right">
+                      {hours.filter((h) => h.open).length === 0
+                        ? "sin días definidos"
+                        : hours
+                            .filter((h) => h.open)
+                            .map(
+                              (h) =>
+                                `${DAY_LABELS[h.weekday].slice(0, 3)} ${h.start}–${h.end}`
+                            )
+                            .join(", ")}
                     </dd>
                   </div>
                 </dl>
