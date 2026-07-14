@@ -18,3 +18,11 @@ export function emailLink(subject: string, body: string): string {
 
 // Slug del negocio de demostración (usa datos locales, no Supabase)
 export const DEMO_SLUG = "aura-estudio";
+
+// Dominio público de la plataforma (actualizar al comprar dominio propio).
+export const SITE_URL = "https://azenda-nu.vercel.app";
+
+/** URL pública de reservas de un negocio, la que comparte con sus clientes. */
+export function bookingUrl(slug: string): string {
+  return `${SITE_URL}/${slug}`;
+}

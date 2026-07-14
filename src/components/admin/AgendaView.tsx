@@ -9,6 +9,8 @@ import { workIntervals } from "@/lib/availability";
 import NewAppointmentModal, {
   type ModalPrefill,
 } from "@/components/admin/NewAppointmentModal";
+import DatePicker from "@/components/admin/DatePicker";
+import ShareBookingDialog from "@/components/admin/ShareBookingDialog";
 import {
   addDays,
   fmtCLP,
@@ -53,6 +55,8 @@ export default function AgendaView() {
   const [day, setDay] = useState(() => new Date());
   const [selected, setSelected] = useState<Appointment | null>(null);
   const [modal, setModal] = useState<ModalPrefill | null>(null);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   // En pantallas chicas se puede filtrar a un solo profesional
   const [staffFilter, setStaffFilter] = useState<string>("all");
 
@@ -93,9 +97,14 @@ export default function AgendaView() {
     <div className="flex h-full flex-col">
       {/* Barra superior */}
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-surface px-4 py-3 md:px-6 md:py-4">
-        <div>
+        <div className="flex items-center gap-3">
           <h1 className="font-serif text-xl tracking-tight md:text-2xl">Agenda</h1>
-          <p className="text-sm capitalize text-ink-faint">{fmtDayLong(day)}</p>
+          <button
+            onClick={() => setShowShare(true)}
+            className="hidden rounded-md border border-line px-3 py-1.5 text-xs text-ink-soft transition-colors hover:border-sage hover:text-sage sm:block"
+          >
+            ↗ Compartir página de reservas
+          </button>
         </div>
         <div className="flex items-center gap-2">
           {allStaff.length > 1 && (
@@ -122,18 +131,31 @@ export default function AgendaView() {
           <button
             onClick={() => setDay((d) => addDays(d, -1))}
             className="rounded-md border border-line px-3 py-2 text-sm transition-colors hover:border-line-strong"
+            aria-label="Día anterior"
           >
             ←
           </button>
-          <button
-            onClick={() => setDay(new Date())}
-            className="rounded-md border border-line px-4 py-2 text-sm transition-colors hover:border-line-strong"
-          >
-            Hoy
-          </button>
+          {/* Fecha clicable → abre el calendario */}
+          <div className="relative">
+            <button
+              onClick={() => setShowCalendar((v) => !v)}
+              className="min-w-[150px] rounded-md border border-line px-3 py-2 text-sm capitalize transition-colors hover:border-sage"
+            >
+              {sameDay(day, new Date()) ? "Hoy · " : ""}
+              {fmtDayLong(day).replace(/ de \w+$/, "")}
+            </button>
+            {showCalendar && (
+              <DatePicker
+                value={day}
+                onSelect={setDay}
+                onClose={() => setShowCalendar(false)}
+              />
+            )}
+          </div>
           <button
             onClick={() => setDay((d) => addDays(d, 1))}
             className="rounded-md border border-line px-3 py-2 text-sm transition-colors hover:border-line-strong"
+            aria-label="Día siguiente"
           >
             →
           </button>
@@ -324,6 +346,13 @@ export default function AgendaView() {
           day={day}
           prefill={modal}
           onClose={() => setModal(null)}
+        />
+      )}
+      {showShare && (
+        <ShareBookingDialog
+          slug={db.business.slug}
+          businessName={db.business.name}
+          onClose={() => setShowShare(false)}
         />
       )}
     </div>

@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useDB, useMyRole } from "@/lib/store";
 import { supabase } from "@/lib/supabase";
+import ShareBookingDialog from "@/components/admin/ShareBookingDialog";
 
 const NAV = [
   { suffix: "", label: "Agenda", icon: "▤", adminOnly: false },
@@ -19,6 +21,7 @@ export default function AdminNav() {
   const router = useRouter();
   const db = useDB();
   const role = useMyRole();
+  const [showShare, setShowShare] = useState(false);
   const isDemo = pathname.startsWith("/demo");
   const base = isDemo ? "/demo" : "/app";
   // RBAC de interfaz: el rol "staff" no ve finanzas ni configuración
@@ -84,12 +87,12 @@ export default function AdminNav() {
       </nav>
 
       <div className="border-t border-line px-5 py-4">
-        <Link
-          href={`/${db.business.slug}`}
-          className="block text-xs text-sage hover:underline"
+        <button
+          onClick={() => setShowShare(true)}
+          className="w-full rounded-md bg-sage-tint px-3 py-2 text-left text-xs font-medium text-sage-deep transition-colors hover:bg-sage/20"
         >
-          Ver mi página de reservas →
-        </Link>
+          ↗ Compartir página de reservas
+        </button>
         {isDemo ? (
           <p className="mt-2 text-[11px] leading-relaxed text-ink-faint">
             Modo demo · los datos viven en este navegador
@@ -107,6 +110,14 @@ export default function AdminNav() {
         )}
       </div>
       </aside>
+
+      {showShare && (
+        <ShareBookingDialog
+          slug={db.business.slug}
+          businessName={db.business.name}
+          onClose={() => setShowShare(false)}
+        />
+      )}
     </>
   );
 }
