@@ -209,7 +209,7 @@ export default function BookingSite({ slug }: { slug: string }) {
             </div>
           </div>
           <span className="text-xs text-ink-faint">
-            con <span className="font-serif">Azenda</span>
+            con <span className="font-serif">Buuki</span>
           </span>
         </div>
       </header>

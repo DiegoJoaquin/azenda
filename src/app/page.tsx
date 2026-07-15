@@ -79,8 +79,8 @@ const PLANS = [
     ],
     cta: "Escríbenos",
     href: emailLink(
-      "Plan Empresa — Azenda",
-      "Hola, me interesa el plan Empresa de Azenda."
+      "Plan Empresa — Buuki",
+      "Hola, me interesa el plan Empresa de Buuki."
     ),
     highlight: false,
   },
@@ -92,7 +92,7 @@ export default function Home() {
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-sm">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <span className="font-serif text-xl tracking-tight">Azenda</span>
+          <span className="font-serif text-xl tracking-tight">Buuki</span>
           <nav className="hidden items-center gap-8 text-sm text-ink-soft md:flex">
             <a href="#funcionalidades" className="hover:text-ink">Funcionalidades</a>
             <a href="#rubros" className="hover:text-ink">Rubros</a>
@@ -127,7 +127,7 @@ export default function Home() {
             Tus horas, reservadas solas.
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-            Azenda le da a tu negocio una página de reservas propia y un panel
+            Buuki le da a tu negocio una página de reservas propia y un panel
             que ordena agenda, clientes y equipo — adaptado a tu rubro desde el
             primer día.
           </p>
@@ -200,7 +200,7 @@ export default function Home() {
                 Estandarizado para tu rubro
               </h2>
               <p className="mt-4 leading-relaxed text-ink-soft">
-                Al crear tu cuenta eliges tu rubro y Azenda se configura sola:
+                Al crear tu cuenta eliges tu rubro y Buuki se configura sola:
                 servicios típicos precargados, ficha de cliente adecuada y las
                 funciones que tu industria usa de verdad.
               </p>
@@ -277,7 +277,7 @@ export default function Home() {
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-6 py-12 sm:flex-row sm:items-center">
           <div>
-            <span className="font-serif text-lg">Azenda</span>
+            <span className="font-serif text-lg">Buuki</span>
             <p className="mt-1 text-sm text-ink-faint">
               Agenda online para negocios de servicios.
             </p>

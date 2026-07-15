@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <div className="flex min-h-dvh items-center justify-center px-6">
       <div className="max-w-sm text-center">
-        <p className="font-serif text-lg text-ink-faint">Azenda</p>
+        <p className="font-serif text-lg text-ink-faint">Buuki</p>
         <h1 className="mt-4 font-serif text-3xl tracking-tight">
           Página no encontrada
         </h1>

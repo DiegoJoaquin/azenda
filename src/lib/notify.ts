@@ -4,7 +4,7 @@
 // Requiere en el entorno del servidor (Vercel):
 //   SUPABASE_SERVICE_ROLE_KEY  — para leer la cola entre tenants
 //   RESEND_API_KEY             — para enviar correos
-//   RESEND_FROM                — remitente, ej: "Azenda <hola@tudominio.cl>"
+//   RESEND_FROM                — remitente, ej: "Buuki <hola@tudominio.cl>"
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { CONTACT_EMAIL } from "./config";
@@ -150,7 +150,7 @@ async function sendOwnerDigest(sb: SupabaseClient): Promise<boolean> {
     (rows ?? [])
       .map(
         (r) =>
-          `<li><strong>${escapeHtml(r.name)}</strong> (azenda.cl/${r.slug})` +
+          `<li><strong>${escapeHtml(r.name)}</strong> (buuki.cl/${r.slug})` +
           `${r.phone ? " · " + escapeHtml(r.phone) : ""}${extra ? extra(r) : ""}</li>`
       )
       .join("");
@@ -179,7 +179,7 @@ async function sendOwnerDigest(sb: SupabaseClient): Promise<boolean> {
 
   const html = `
   <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; color: #1f1d1a; font-size: 14px;">
-    <p style="font-family: Georgia, serif; font-size: 20px;">Azenda — resumen del día</p>
+    <p style="font-family: Georgia, serif; font-size: 20px;">Buuki — resumen del día</p>
     ${secciones.join("")}
     <p style="font-size: 12px; color: #8a857c;">
       Para activar una cuenta: Supabase → Table Editor → businesses →
@@ -194,9 +194,9 @@ async function sendOwnerDigest(sb: SupabaseClient): Promise<boolean> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: process.env.RESEND_FROM ?? "Azenda <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM ?? "Buuki <onboarding@resend.dev>",
       to: [CONTACT_EMAIL],
-      subject: "Azenda — negocios nuevos y pruebas por vencer",
+      subject: "Buuki — negocios nuevos y pruebas por vencer",
       html,
     }),
   });
@@ -302,7 +302,7 @@ async function sendEmail(type: string, to: string, d: Detail) {
         ? `<p style="font-family: Arial, sans-serif; font-size: 12px; color: #8a857c;">¿Necesitas cambiar tu hora? Escríbenos al ${escapeHtml(d.businessPhone)}.</p>`
         : ""
     }
-    <p style="font-family: Arial, sans-serif; font-size: 11px; color: #8a857c;">Enviado por Azenda</p>
+    <p style="font-family: Arial, sans-serif; font-size: 11px; color: #8a857c;">Enviado por Buuki</p>
   </div>`;
 
   const res = await fetch("https://api.resend.com/emails", {
@@ -312,7 +312,7 @@ async function sendEmail(type: string, to: string, d: Detail) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: process.env.RESEND_FROM ?? "Azenda <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM ?? "Buuki <onboarding@resend.dev>",
       to: [to],
       subject: subjects[type] ?? subjects.confirmation,
       html,

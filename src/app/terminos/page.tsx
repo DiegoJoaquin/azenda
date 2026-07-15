@@ -3,7 +3,7 @@ import LegalShell from "@/components/legal/LegalShell";
 import { CONTACT_EMAIL } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Términos y Condiciones — Azenda",
+  title: "Términos y Condiciones — Buuki",
 };
 
 const UPDATED = "13 de julio de 2026";
@@ -13,7 +13,7 @@ export default function TerminosPage() {
     <LegalShell title="Términos y Condiciones de Servicio" updated={UPDATED}>
       <p>
         Estos Términos y Condiciones (los <strong>“Términos”</strong>) regulan
-        el acceso y uso de la plataforma <strong>Azenda</strong> (el
+        el acceso y uso de la plataforma <strong>Buuki</strong> (el
         <strong> “Servicio”</strong>), un software de agenda y reservas en línea
         ofrecido a negocios de servicios. El Servicio es operado por su titular
         (el <strong>“Operador”</strong>), con quien podrás comunicarte en{" "}
@@ -29,7 +29,7 @@ export default function TerminosPage() {
       <div className="callout">
         <p>
           <strong>Resumen en simple</strong> (no reemplaza el texto legal):
-          Azenda es una herramienta de software para gestionar reservas. Tú y tu
+          Buuki es una herramienta de software para gestionar reservas. Tú y tu
           negocio son responsables de la atención que prestan y de los datos de
           sus clientes; nosotros ponemos el software y hacemos lo razonable por
           mantenerlo disponible y seguro, pero no somos parte de la relación
@@ -39,7 +39,7 @@ export default function TerminosPage() {
 
       <h2>1. Descripción del Servicio</h2>
       <p>
-        Azenda permite a un negocio publicar una página de reservas, administrar
+        Buuki permite a un negocio publicar una página de reservas, administrar
         su agenda, servicios, equipo y clientes, y recibir reservas en línea. El
         Servicio es una herramienta de gestión: <strong>no</strong> prestamos
         los servicios que tu negocio ofrece, no intermediamos pagos entre tu
@@ -116,7 +116,7 @@ export default function TerminosPage() {
         clientes, notas— es de tu exclusiva responsabilidad. Declaras contar con
         el derecho y la base legal para tratarlo. Respecto de los datos
         personales de tus clientes, <strong>tu negocio actúa como responsable
-        del tratamiento</strong> y Azenda como <strong>encargado</strong>, en los
+        del tratamiento</strong> y Buuki como <strong>encargado</strong>, en los
         términos del{" "}
         <a href="/privacidad">Aviso de Privacidad y Acuerdo de Tratamiento de
         Datos</a>.
@@ -160,7 +160,7 @@ export default function TerminosPage() {
 
       <h2>9. Propiedad intelectual</h2>
       <p>
-        El software, la marca, el diseño y el código de Azenda pertenecen al
+        El software, la marca, el diseño y el código de Buuki pertenecen al
         Operador. Se te otorga una licencia limitada, no exclusiva e
         intransferible para usar el Servicio mientras esté vigente tu cuenta. Los
         datos que cargas siguen siendo tuyos.

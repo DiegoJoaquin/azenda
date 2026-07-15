@@ -17,8 +17,8 @@ export default function ActivateDialog({
 }) {
   const [copied, setCopied] = useState<"email" | "msg" | null>(null);
 
-  const asunto = `Activar cuenta Azenda — ${businessName}`;
-  const mensaje = `Hola, quiero activar mi cuenta de Azenda para "${businessName}". Envíenme los datos para transferir, por favor.`;
+  const asunto = `Activar cuenta Buuki — ${businessName}`;
+  const mensaje = `Hola, quiero activar mi cuenta de Buuki para "${businessName}". Envíenme los datos para transferir, por favor.`;
 
   async function copy(text: string, which: "email" | "msg") {
     try {

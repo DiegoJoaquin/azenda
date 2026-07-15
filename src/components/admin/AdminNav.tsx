@@ -55,7 +55,7 @@ export default function AdminNav() {
       <aside className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col border-r border-line bg-surface md:flex">
       <div className="border-b border-line px-5 py-5">
         <Link href="/" className="font-serif text-lg tracking-tight">
-          Azenda
+          Buuki
         </Link>
         <p className="mt-1 truncate text-xs text-ink-faint">
           {db.business.name}

@@ -1,23 +1,25 @@
 @import "tailwindcss";
 
 @theme {
-  /* Paleta — base neutra cálida + acento verde salvia profundo */
-  --color-paper: #faf9f6;
+  /* Buuki — base blanco crema + acento verde olivo (claro/oscuro).
+     Los nombres de variable (sage) se mantienen por compatibilidad interna;
+     sus valores ahora corresponden a la paleta olivo de la marca. */
+  --color-paper: #f7f5ef;        /* blanco crema */
   --color-surface: #ffffff;
-  --color-ink: #1f1d1a;
-  --color-ink-soft: #55514a;
-  --color-ink-faint: #8a857c;
-  --color-line: #e7e4de;
-  --color-line-strong: #d6d2c9;
-  --color-sage: #3f5c4b;
-  --color-sage-deep: #32493c;
-  --color-sage-tint: #eef2ee;
-  --color-clay: #b0713f;
-  --color-clay-tint: #f7ede2;
+  --color-ink: #22241c;          /* casi negro con matiz olivo */
+  --color-ink-soft: #55574a;
+  --color-ink-faint: #8b8c7e;
+  --color-line: #e7e4d9;
+  --color-line-strong: #d6d3c4;
+  --color-sage: #5c6a3a;         /* verde olivo (acento principal) */
+  --color-sage-deep: #454f2b;    /* olivo oscuro */
+  --color-sage-tint: #eef0e3;    /* olivo muy claro (fondos) */
+  --color-clay: #9a7b3c;         /* dorado/olivo cálido para avisos */
+  --color-clay-tint: #f4eede;
   --color-danger: #a04338;
   --color-danger-tint: #f7e9e7;
-  --color-info: #3d5568;
-  --color-info-tint: #e9eff3;
+  --color-info: #4a5340;         /* olivo apagado para notas */
+  --color-info-tint: #eceee2;
 }
 
 /* Las fuentes de next/font viven como variables en <body>, por eso

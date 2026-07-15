@@ -143,7 +143,7 @@ export default function ConfiguracionPage() {
             <p className="text-xs text-ink-faint">
               Tu página de reservas:{" "}
               <Link href={`/${b.slug}`} className="text-sage hover:underline">
-                azenda.cl/{b.slug}
+                buuki.cl/{b.slug}
               </Link>
             </p>
           </div>

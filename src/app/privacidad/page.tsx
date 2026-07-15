@@ -3,7 +3,7 @@ import LegalShell from "@/components/legal/LegalShell";
 import { CONTACT_EMAIL } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidad — Azenda",
+  title: "Política de Privacidad — Buuki",
 };
 
 const UPDATED = "13 de julio de 2026";
@@ -12,7 +12,7 @@ export default function PrivacidadPage() {
   return (
     <LegalShell title="Política de Privacidad" updated={UPDATED}>
       <p>
-        Esta Política explica cómo <strong>Azenda</strong> (el
+        Esta Política explica cómo <strong>Buuki</strong> (el
         <strong> “Servicio”</strong>) trata los datos personales, en cumplimiento
         de la Ley N° 19.628 y de la Ley N° 21.719 sobre protección de datos
         personales de Chile. Para cualquier gestión relativa a tus datos,
@@ -22,11 +22,11 @@ export default function PrivacidadPage() {
       <div className="callout">
         <p>
           <strong>Dos roles distintos.</strong> Cuando un <em>negocio</em>{" "}
-          contrata Azenda para gestionar su agenda, ese negocio es el{" "}
-          <strong>responsable</strong> de los datos de sus clientes y Azenda es su{" "}
+          contrata Buuki para gestionar su agenda, ese negocio es el{" "}
+          <strong>responsable</strong> de los datos de sus clientes y Buuki es su{" "}
           <strong>encargado</strong> (procesa los datos por cuenta del negocio y
           según sus instrucciones). Respecto de los datos de la propia cuenta del
-          negocio y del sitio de marketing, Azenda actúa como responsable. Abajo
+          negocio y del sitio de marketing, Buuki actúa como responsable. Abajo
           se detalla cada caso.
         </p>
       </div>
@@ -42,7 +42,7 @@ export default function PrivacidadPage() {
       </p>
 
       <h2>2. Qué datos tratamos y con qué finalidad</h2>
-      <h3>a) Datos de la cuenta del negocio (Azenda como responsable)</h3>
+      <h3>a) Datos de la cuenta del negocio (Buuki como responsable)</h3>
       <ul>
         <li>
           <strong>Datos:</strong> correo, contraseña (almacenada cifrada), nombre
@@ -57,7 +57,7 @@ export default function PrivacidadPage() {
           contigo.
         </li>
       </ul>
-      <h3>b) Datos de los clientes finales del negocio (Azenda como encargado)</h3>
+      <h3>b) Datos de los clientes finales del negocio (Buuki como encargado)</h3>
       <ul>
         <li>
           <strong>Datos:</strong> nombre, correo, teléfono, historial de citas y
@@ -107,7 +107,7 @@ export default function PrivacidadPage() {
         <p>
           Si eres cliente de un negocio y quieres ejercer estos derechos sobre los
           datos que ese negocio registró, dirígete directamente al negocio (es el
-          responsable). Azenda, como encargado, apoyará al negocio para atender tu
+          responsable). Buuki, como encargado, apoyará al negocio para atender tu
           solicitud.
         </p>
       </div>
@@ -132,8 +132,8 @@ export default function PrivacidadPage() {
 
       <h2>8. Acuerdo de Tratamiento de Datos (encargo)</h2>
       <p>
-        Cuando un negocio usa Azenda, este acuerdo forma parte del contrato y
-        regula el tratamiento de los datos de sus clientes. En su virtud, Azenda,
+        Cuando un negocio usa Buuki, este acuerdo forma parte del contrato y
+        regula el tratamiento de los datos de sus clientes. En su virtud, Buuki,
         como encargado, se obliga a:
       </p>
       <ul>

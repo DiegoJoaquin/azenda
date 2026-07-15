@@ -117,7 +117,7 @@ function LockedScreen() {
   return (
     <div className="flex min-h-screen items-center justify-center px-6">
       <div className="w-full max-w-md text-center">
-        <p className="font-serif text-lg text-ink-faint">Azenda</p>
+        <p className="font-serif text-lg text-ink-faint">Buuki</p>
         <h1 className="mt-6 font-serif text-4xl tracking-tight">
           {suspended
             ? "Tu cuenta está suspendida"
@@ -125,7 +125,7 @@ function LockedScreen() {
         </h1>
         <p className="mx-auto mt-4 max-w-sm leading-relaxed text-ink-soft">
           Tus datos y tu agenda están guardados y a salvo. Para seguir usando
-          Azenda con <strong className="text-ink">{b.name}</strong>, escríbenos
+          Buuki con <strong className="text-ink">{b.name}</strong>, escríbenos
           y activamos tu cuenta el mismo día.
         </p>
         <div className="mx-auto mt-8 max-w-sm rounded-lg border border-line bg-surface px-6 py-5 text-left text-sm text-ink-soft">

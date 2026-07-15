@@ -19,20 +19,20 @@ const DESC =
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Azenda — Agenda online y gestión para negocios de servicios",
+  title: "Buuki — Agenda online y gestión para negocios de servicios",
   description: DESC,
   openGraph: {
-    title: "Azenda — Tu agenda ordenada, tus horas reservadas solas",
+    title: "Buuki — Tu agenda ordenada, tus horas reservadas solas",
     description: DESC,
     url: SITE_URL,
-    siteName: "Azenda",
+    siteName: "Buuki",
     locale: "es_CL",
     type: "website",
-    images: [{ url: "/icon-512.png", width: 512, height: 512, alt: "Azenda" }],
+    images: [{ url: "/icon-512.png", width: 512, height: 512, alt: "Buuki" }],
   },
   twitter: {
     card: "summary",
-    title: "Azenda — Agenda online para negocios de servicios",
+    title: "Buuki — Agenda online para negocios de servicios",
     description: DESC,
   },
   manifest: "/manifest.webmanifest",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    title: "Azenda",
+    title: "Buuki",
     statusBarStyle: "default",
   },
 };
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#faf9f6",
+  themeColor: "#f7f5ef",
 };
 
 export default function RootLayout({

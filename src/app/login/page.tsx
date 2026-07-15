@@ -37,7 +37,7 @@ export default function LoginPage() {
       <header className="border-b border-line bg-surface">
         <div className="mx-auto flex h-16 max-w-6xl items-center px-6">
           <Link href="/" className="font-serif text-xl tracking-tight">
-            Azenda
+            Buuki
           </Link>
         </div>
       </header>

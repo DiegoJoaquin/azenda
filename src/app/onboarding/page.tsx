@@ -226,7 +226,7 @@ export default function OnboardingPage() {
       <header className="border-b border-line bg-surface">
         <div className="mx-auto flex h-16 max-w-2xl items-center justify-between px-6">
           <Link href="/" className="font-serif text-xl tracking-tight">
-            Azenda
+            Buuki
           </Link>
           <span className="text-xs text-ink-faint">
             Paso {step} de 4 · prueba gratis de {TRIAL_DAYS} días
@@ -310,7 +310,7 @@ export default function OnboardingPage() {
                   Tu página de reservas
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-ink-faint">azenda.cl/</span>
+                  <span className="text-sm text-ink-faint">buuki.cl/</span>
                   <input
                     value={slugTouched ? slug : effectiveSlug}
                     onChange={(e) => {
@@ -625,7 +625,7 @@ export default function OnboardingPage() {
                   </div>
                   <div className="flex justify-between">
                     <dt>Página de reservas</dt>
-                    <dd>azenda.cl/{effectiveSlug}</dd>
+                    <dd>buuki.cl/{effectiveSlug}</dd>
                   </div>
                   <div className="flex justify-between">
                     <dt>Servicios</dt>
