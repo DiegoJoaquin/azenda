@@ -220,3 +220,60 @@ Con 3 pagando validaste el negocio. De ahí, a escalar.
 - No regales meses infinitos: 7 días es suficiente para enganchar.
 - No prometas lo que no hay (ej. pago con tarjeta): sé honesto, transfieren y
   activas. Esa cercanía en Chile genera confianza, no la resta.
+
+---
+
+## 8. Calendario de lanzamiento (día por día)
+
+### Antes del día 1 (preparación, 1-2 horas)
+- Crear la cuenta **@buuki.cl** en Instagram.
+- Foto de perfil: `logo-perfil-olivo.png`.
+- Bio (sección 4) + link.
+- Tener descargadas las 10 imágenes y el flyer.
+
+### Semana 1 — Armar el perfil (publica ANTES de vender)
+No contactes a nadie hasta tener el perfil con 3-4 posts. Un perfil vacío no convierte.
+
+| Día | Publicación | Formato | Mejor hora (Chile) |
+|-----|-------------|---------|--------------------|
+| Lun | **1 · Presentación** | Feed | 13:00 o 20:00 |
+| Mar | Historia: **CTA** | Story | mañana |
+| Mié | **2 · El problema (WhatsApp)** | Feed | 20:00 |
+| Vie | **3 · Cómo reserva tu cliente** | Feed | 13:00 |
+| Sáb | Historia: **Tip (no-show)** | Story | mediodía |
+
+**En paralelo (desde el miércoles):** empieza la prospección. 15-20 DMs/día a
+barberías y peluquerías (mensaje 3.1). Personaliza la primera línea SIEMPRE.
+
+### Semana 2 — Producto + prueba social + empujar ventas
+
+| Día | Publicación | Formato | Mejor hora |
+|-----|-------------|---------|-----------|
+| Lun | **4 · −70% inasistencias** | Feed | 20:00 |
+| Mar | Historia: encuesta "¿Agendas por WhatsApp o por link?" | Story | mañana |
+| Mié | **5 · Tu panel (la agenda ordenada)** | Feed | 13:00 |
+| Jue | **9 · Clínicas** (si apuntas a ese rubro) | Feed | 13:00 |
+| Vie | **6 · CTA 7 días gratis** | Feed | 20:00 |
+| Sáb | **10 · Rubros** | Feed | mediodía |
+
+**En paralelo:** sigue con 15-20 DMs/día. Suma correos (mensajes 3.3 y 3.4) a
+negocios con web. Haz seguimiento (3.5) a quienes no respondieron.
+
+### Semana 3 en adelante — Ritmo de crucero
+- **3 posts/semana**: 1 de valor (tip en Reel), 1 de producto, 1 de prueba
+  social (cuando tengas tu primer cliente: pídele una foto/testimonio).
+- **2-3 historias/semana**: detrás de escena, encuestas, "negocio de la semana".
+- Reutiliza las 10 piezas: en Instagram está bien re-publicar un concepto cada
+  3-4 semanas con otra bajada.
+- **Flyer**: imprime y déjalo (o mándalo por DM en PDF) en barberías/salones que
+  visites.
+
+### Reglas de oro del calendario
+1. **Constancia > perfección.** Mejor 3 posts simples a la semana, siempre, que
+   10 una vez y desaparecer.
+2. **La venta real está en los DMs, no en los posts.** Los posts dan
+   credibilidad; los mensajes traen clientes. Dedica más tiempo a prospectar.
+3. **Mejores horas en Chile:** 13:00-14:00 (colación) y 20:00-22:00 (noche).
+   Evita la madrugada y las mañanas de lunes.
+4. **Primer cliente = oro.** Apenas cierres uno, pídele que te deje mostrar su
+   página como ejemplo y un testimonio. Eso vende a los siguientes.
