@@ -80,10 +80,19 @@ export default function ClientesPage() {
               </button>
             );
           })}
-          {clients.length === 0 && (
+          {clients.length === 0 && query && (
             <p className="px-6 py-10 text-center text-sm text-ink-faint">
               Sin resultados para “{query}”.
             </p>
+          )}
+          {db.clients.length === 0 && !query && (
+            <div className="px-6 py-12 text-center">
+              <p className="text-sm font-medium">Aún no tienes clientes</p>
+              <p className="mx-auto mt-1.5 max-w-[240px] text-xs leading-relaxed text-ink-faint">
+                Se agregan solos cuando alguien reserva por tu página, o al crear
+                una cita manual. Comparte tu link para recibir la primera.
+              </p>
+            </div>
           )}
         </div>
       </div>

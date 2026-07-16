@@ -6,7 +6,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { useDB, submitBooking } from "@/lib/store";
+import { useDB, submitBooking, getMode } from "@/lib/store";
 import {
   getAvailableSlots,
   type BookingSelection,
@@ -22,6 +22,7 @@ import {
   sameDay,
 } from "@/lib/dates";
 import { isBusinessLocked, type Appointment, type DB } from "@/lib/types";
+import { googleCalendarUrl, icsDataUrl, mapsUrl } from "@/lib/calendar";
 
 const DAY_NAMES = [
   "domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado",
@@ -259,7 +260,19 @@ export default function BookingSite({ slug }: { slug: string }) {
             <dl className="mt-8 space-y-2 text-sm text-ink-soft">
               <div className="flex gap-3">
                 <dt className="w-20 text-ink-faint">Dirección</dt>
-                <dd>{biz.address}</dd>
+                <dd>
+                  {biz.address}
+                  {biz.address && (
+                    <a
+                      href={mapsUrl(biz.address)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-2 text-sage underline-offset-2 hover:underline"
+                    >
+                      Cómo llegar →
+                    </a>
+                  )}
+                </dd>
               </div>
               <div className="flex gap-3">
                 <dt className="w-20 text-ink-faint">Teléfono</dt>
@@ -593,6 +606,43 @@ export default function BookingSite({ slug }: { slug: string }) {
                 Total: {fmtCLP(confirmed.totalClp)} · Pago en el local
               </p>
             </div>
+
+            {/* Agregar al calendario: reduce inasistencias */}
+            <div className="mx-auto mt-6 max-w-sm">
+              <p className="mb-2 text-xs uppercase tracking-widest text-ink-faint">
+                Guarda tu cita
+              </p>
+              <div className="flex gap-3">
+                <a
+                  href={googleCalendarUrl(confirmed, {
+                    businessName: biz.name,
+                    address: biz.address,
+                    serviceNames: confirmed.items.map(
+                      (it) => db.services.find((s) => s.id === it.serviceId)?.name ?? ""
+                    ),
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 rounded-md border border-line-strong py-2.5 text-center text-sm transition-colors hover:border-ink"
+                >
+                  Google Calendar
+                </a>
+                <a
+                  href={icsDataUrl(confirmed, {
+                    businessName: biz.name,
+                    address: biz.address,
+                    serviceNames: confirmed.items.map(
+                      (it) => db.services.find((s) => s.id === it.serviceId)?.name ?? ""
+                    ),
+                  })}
+                  download="reserva.ics"
+                  className="flex-1 rounded-md border border-line-strong py-2.5 text-center text-sm transition-colors hover:border-ink"
+                >
+                  Apple / Outlook
+                </a>
+              </div>
+            </div>
+
             <div className="mt-10 flex justify-center gap-4 text-sm">
               <button
                 onClick={() => {
@@ -607,12 +657,14 @@ export default function BookingSite({ slug }: { slug: string }) {
               >
                 Hacer otra reserva
               </button>
-              <Link
-                href="/app"
-                className="rounded-md bg-ink px-5 py-2.5 text-white transition-colors hover:bg-black"
-              >
-                Ver la agenda del negocio →
-              </Link>
+              {getMode() === "demo" && (
+                <Link
+                  href="/demo"
+                  className="rounded-md bg-ink px-5 py-2.5 text-white transition-colors hover:bg-black"
+                >
+                  Ver la agenda del negocio →
+                </Link>
+              )}
             </div>
           </div>
         )}
