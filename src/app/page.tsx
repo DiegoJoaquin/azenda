@@ -19,8 +19,8 @@ const FEATURES = [
     body: "Historial de visitas, notas y preferencias. La ficha se adapta a tu rubro: técnica, clínica o de sesiones.",
   },
   {
-    title: "Recordatorios automáticos",
-    body: "Confirmaciones y recordatorios por correo y WhatsApp que reducen las inasistencias hasta un 70%.",
+    title: "Recordatorio automático",
+    body: "Un recordatorio de la cita a tus clientes el día antes, para que no falten y bajen las inasistencias hasta un 70%.",
   },
   {
     title: "Protección de agenda",
@@ -39,14 +39,16 @@ const VERTICALS = [
 
 const PLANS = [
   {
-    name: "Individual",
+    name: "Solo",
     price: "$9.900",
     period: "por mes",
     features: [
       "1 profesional",
-      "Agenda y reservas online",
-      "Citas ilimitadas",
-      "Clientes y finanzas",
+      "Reservas online ilimitadas",
+      "Tu página propia con logo",
+      "Clientes con ficha e historial",
+      "Finanzas y reportes de ingresos",
+      "Recordatorio de la cita a tus clientes",
     ],
     cta: `Prueba gratis por ${TRIAL_DAYS} días`,
     href: "/registro",
@@ -57,30 +59,30 @@ const PLANS = [
     price: "$19.900",
     period: "por mes",
     features: [
+      "Todo lo de Solo",
       "Hasta 8 profesionales",
-      "Citas ilimitadas",
-      "Bloqueos y turnos por persona",
-      "Reportes de ingresos y ocupación",
-      "Soporte por WhatsApp",
+      "Turnos y bloqueos por persona",
+      "Soporte prioritario por WhatsApp",
     ],
     cta: `Prueba gratis por ${TRIAL_DAYS} días`,
     href: "/registro",
     highlight: true,
   },
   {
-    name: "Empresa",
-    price: "$49.900",
+    name: "Pro",
+    price: "$34.900",
     period: "por mes",
     features: [
+      "Todo lo de Estudio",
       "Profesionales ilimitados",
       "Multi-sucursal (próximamente)",
-      "Permisos por rol",
-      "Soporte prioritario",
+      "Acceso para tu equipo sin que vean las finanzas",
+      "Soporte dedicado",
     ],
     cta: "Escríbenos",
     href: emailLink(
-      "Plan Empresa — Buuki",
-      "Hola, me interesa el plan Empresa de Buuki."
+      "Plan Pro — Buuki",
+      "Hola, me interesa el plan Pro de Buuki."
     ),
     highlight: false,
   },
