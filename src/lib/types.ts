@@ -9,6 +9,7 @@ export type Vertical =
   | "clinica_salud"
   | "psicologia"
   | "fitness"
+  | "canchas"
   | "generico";
 
 export type AppointmentStatus =
@@ -154,5 +155,6 @@ export const VERTICAL_LABEL: Record<Vertical, string> = {
   clinica_salud: "Clínica y salud",
   psicologia: "Psicología",
   fitness: "Fitness",
+  canchas: "Canchas de fútbol",
   generico: "Servicios generales",
 };

@@ -8,6 +8,7 @@
 import { useMemo, useState } from "react";
 import { useDB, upsertClientByEmail, addAppointment, newId } from "@/lib/store";
 import { getAvailableSlots } from "@/lib/availability";
+import { terms } from "@/lib/terms";
 import {
   dateKey,
   fmtCLP,
@@ -33,6 +34,7 @@ export default function NewAppointmentModal({
   onClose: () => void;
 }) {
   const db = useDB();
+  const t = terms(db.business.vertical);
 
   const defaultService = prefill.staffId
     ? db.staffServices.find((ss) => ss.staffId === prefill.staffId)?.serviceId
@@ -249,7 +251,7 @@ export default function NewAppointmentModal({
           {/* Profesional y fecha */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <span className="mb-1.5 block text-sm text-ink-soft">Profesional</span>
+              <span className="mb-1.5 block text-sm text-ink-soft">{t.ResourceCap}</span>
               <select
                 value={effectiveStaffId}
                 onChange={(e) => {
@@ -258,7 +260,7 @@ export default function NewAppointmentModal({
                 }}
                 className="w-full rounded-md border border-line bg-paper px-3.5 py-2.5 text-sm outline-none focus:border-sage"
               >
-                <option value="">Primero disponible</option>
+                <option value="">{t.any}</option>
                 {eligibleStaff.map((st) => (
                   <option key={st.id} value={st.id}>
                     {st.name}

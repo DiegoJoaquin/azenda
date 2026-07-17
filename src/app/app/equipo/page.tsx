@@ -9,6 +9,7 @@ import {
   removeTimeBlock,
 } from "@/lib/store";
 import { dateKey, fmtDayShort, fmtTime, parseISO } from "@/lib/dates";
+import { terms } from "@/lib/terms";
 import type { Staff } from "@/lib/types";
 
 const WEEKDAYS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
@@ -16,6 +17,7 @@ const PALETTE = ["#3f5c4b", "#b0713f", "#3d5568", "#7a5b7d", "#8a6d3b", "#4f6d7a
 
 export default function EquipoPage() {
   const db = useDB();
+  const t = terms(db.business.vertical);
   const [showAdd, setShowAdd] = useState(false);
   const [blockFor, setBlockFor] = useState<Staff | null>(null);
 
@@ -28,16 +30,18 @@ export default function EquipoPage() {
     <div className="min-h-screen">
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-surface px-4 py-4 md:px-8">
         <div>
-          <h1 className="font-serif text-2xl tracking-tight">Equipo</h1>
+          <h1 className="font-serif text-2xl tracking-tight">{t.section}</h1>
           <p className="text-sm text-ink-faint">
-            Profesionales, sus turnos y servicios habilitados
+            {t.ResourceCap === "Cancha"
+              ? "Tus canchas, sus horarios y arriendos disponibles"
+              : "Profesionales, sus turnos y servicios habilitados"}
           </p>
         </div>
         <button
           onClick={() => setShowAdd(true)}
           className="rounded-md bg-sage px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-sage-deep"
         >
-          + Agregar profesional
+          + {t.addResource}
         </button>
       </header>
 
@@ -82,7 +86,7 @@ export default function EquipoPage() {
                     onClick={() => {
                       if (
                         confirm(
-                          `¿Quitar a ${st.name} del equipo? Dejará de aparecer en la agenda y en las reservas online. Su historial se conserva.`
+                          `¿Quitar ${st.name}? Dejará de aparecer en la agenda y en las reservas online. Su historial se conserva.`
                         )
                       )
                         setStaffActive(st.id, false);
@@ -132,7 +136,9 @@ export default function EquipoPage() {
                 </div>
                 <div>
                   <p className="mb-2 text-xs uppercase tracking-widest text-ink-faint">
-                    Servicios que realiza
+                    {t.ResourceCap === "Cancha"
+                      ? "Arriendos disponibles"
+                      : "Servicios que realiza"}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {services.map((s) => (
@@ -182,7 +188,7 @@ export default function EquipoPage() {
         {inactiveStaff.length > 0 && (
           <section className="rounded-lg border border-line bg-paper px-6 py-4">
             <p className="text-xs uppercase tracking-widest text-ink-faint">
-              Fuera del equipo
+              {t.ResourceCap === "Cancha" ? "Canchas retiradas" : "Fuera del equipo"}
             </p>
             <div className="mt-3 space-y-2">
               {inactiveStaff.map((st) => (
@@ -218,6 +224,7 @@ export default function EquipoPage() {
 
 function AddStaffModal({ onClose }: { onClose: () => void }) {
   const db = useDB();
+  const t = terms(db.business.vertical);
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
   const [days, setDays] = useState<number[]>([2, 3, 4, 5, 6]);
@@ -233,7 +240,7 @@ function AddStaffModal({ onClose }: { onClose: () => void }) {
       return setError("Selecciona los servicios que realizará.");
     addStaff({
       name: name.trim(),
-      title: title.trim() || "Profesional",
+      title: title.trim() || t.defaultTitle,
       color: PALETTE[db.staff.length % PALETTE.length],
       serviceIds,
       weekdays: days,
@@ -244,26 +251,26 @@ function AddStaffModal({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <Modal title="Agregar profesional" onClose={onClose}>
+    <Modal title={t.addResource} onClose={onClose}>
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-2">
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Nombre y apellido"
+            placeholder={t.namePlaceholder}
             className="rounded-md border border-line bg-paper px-3.5 py-2.5 text-sm outline-none focus:border-sage"
           />
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Cargo (ej: Estilista)"
+            placeholder={t.titlePlaceholder}
             className="rounded-md border border-line bg-paper px-3.5 py-2.5 text-sm outline-none focus:border-sage"
           />
         </div>
 
         <div>
           <span className="mb-1.5 block text-sm text-ink-soft">
-            Días de trabajo
+            {t.ResourceCap === "Cancha" ? "Días que abre" : "Días de trabajo"}
           </span>
           <div className="flex gap-1.5">
             {WEEKDAYS.map((label, wd) => (
@@ -309,7 +316,9 @@ function AddStaffModal({ onClose }: { onClose: () => void }) {
 
         <div>
           <span className="mb-1.5 block text-sm text-ink-soft">
-            Servicios que realiza
+            {t.ResourceCap === "Cancha"
+              ? "Arriendos disponibles en esta cancha"
+              : "Servicios que realiza"}
           </span>
           <div className="flex max-h-36 flex-wrap gap-1.5 overflow-auto">
             {db.services

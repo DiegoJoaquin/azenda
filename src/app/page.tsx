@@ -35,6 +35,7 @@ const VERTICALS = [
   { name: "Clínicas y salud", detail: "Ficha clínica y aprobación previa" },
   { name: "Psicología", detail: "Sesiones, paquetes y videollamada" },
   { name: "Fitness", detail: "Clases con cupos y lista de espera" },
+  { name: "Canchas de fútbol", detail: "Arriendo por cancha y horario" },
 ];
 
 const PLANS = [

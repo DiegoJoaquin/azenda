@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useDB, addService, setServiceActive } from "@/lib/store";
 import { fmtCLP, fmtDuration } from "@/lib/dates";
+import { terms } from "@/lib/terms";
 
 export default function ServiciosPage() {
   const db = useDB();
+  const t = terms(db.business.vertical);
   const [showAdd, setShowAdd] = useState(false);
 
   return (
@@ -47,7 +49,7 @@ export default function ServiciosPage() {
                         <th className="px-5 py-2.5 font-normal">Servicio</th>
                         <th className="px-4 py-2.5 font-normal">Duración</th>
                         <th className="px-4 py-2.5 font-normal">Precio</th>
-                        <th className="px-4 py-2.5 font-normal">Profesionales</th>
+                        <th className="px-4 py-2.5 font-normal">{t.section}</th>
                         <th className="px-4 py-2.5 font-normal">Estado</th>
                         <th className="px-5 py-2.5 text-right font-normal"></th>
                       </tr>
@@ -138,6 +140,7 @@ export default function ServiciosPage() {
 
 function AddServiceModal({ onClose }: { onClose: () => void }) {
   const db = useDB();
+  const t = terms(db.business.vertical);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState(db.categories[0]?.id ?? "");
@@ -152,7 +155,7 @@ function AddServiceModal({ onClose }: { onClose: () => void }) {
     if (!name.trim()) return setError("El nombre es obligatorio.");
     if (duration < 5) return setError("La duración mínima es de 5 minutos.");
     if (staffIds.length === 0)
-      return setError("Asigna al menos un profesional que lo realice.");
+      return setError(`Asigna al menos una ${t.resource}.`);
     addService(
       {
         categoryId,
@@ -269,7 +272,9 @@ function AddServiceModal({ onClose }: { onClose: () => void }) {
 
           <div>
             <span className="mb-1.5 block text-sm text-ink-soft">
-              Profesionales que lo realizan
+              {t.ResourceCap === "Cancha"
+                ? "Canchas donde está disponible"
+                : "Profesionales que lo realizan"}
             </span>
             <div className="flex flex-wrap gap-1.5">
               {db.staff

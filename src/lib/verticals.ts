@@ -86,6 +86,16 @@ export const VERTICAL_PRESETS: Record<Vertical, CategoryPreset[]> = {
       ],
     },
   ],
+  canchas: [
+    {
+      category: "Arriendo",
+      services: [
+        { name: "Arriendo de cancha (1 hora)", description: "Cancha por 60 minutos.", durationMin: 60, priceClp: 30000, bufferAfterMin: 0 },
+        { name: "Cancha + balón", description: "Arriendo con balón incluido.", durationMin: 60, priceClp: 33000, bufferAfterMin: 0 },
+        { name: "Arriendo 1½ hora", description: "Cancha por 90 minutos.", durationMin: 90, priceClp: 42000, bufferAfterMin: 0 },
+      ],
+    },
+  ],
   generico: [
     {
       category: "Servicios",

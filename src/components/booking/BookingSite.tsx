@@ -23,6 +23,7 @@ import {
 } from "@/lib/dates";
 import { isBusinessLocked, type Appointment, type DB } from "@/lib/types";
 import { googleCalendarUrl, icsDataUrl, mapsUrl } from "@/lib/calendar";
+import { terms } from "@/lib/terms";
 
 const DAY_NAMES = [
   "domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado",
@@ -63,6 +64,7 @@ export default function BookingSite({ slug }: { slug: string }) {
   const [submitting, setSubmitting] = useState(false);
 
   const biz = db.business;
+  const t = terms(biz.vertical);
 
   const selections: BookingSelection[] = useMemo(
     () =>
@@ -370,11 +372,9 @@ export default function BookingSite({ slug }: { slug: string }) {
         {step === "profesional" && (
           <div className="pt-10">
             <h2 className="font-serif text-3xl tracking-tight">
-              ¿Con quién prefieres?
+              {t.chooseTitle}
             </h2>
-            <p className="mt-2 text-sm text-ink-soft">
-              Si no tienes preferencia, asignamos al primer profesional disponible.
-            </p>
+            <p className="mt-2 text-sm text-ink-soft">{t.chooseHint}</p>
             <div className="mt-8 space-y-8">
               {selectedServices.map((svcId) => {
                 const svc = db.services.find((s) => s.id === svcId)!;
@@ -396,8 +396,8 @@ export default function BookingSite({ slug }: { slug: string }) {
                         onClick={() =>
                           setStaffChoice((p) => ({ ...p, [svcId]: null }))
                         }
-                        label="Cualquier profesional"
-                        sub="primera hora libre"
+                        label={t.any}
+                        sub={t.anySub}
                       />
                       {eligible.map((st) => (
                         <Chip
@@ -520,7 +520,7 @@ export default function BookingSite({ slug }: { slug: string }) {
                     <div>
                       <p className="font-medium">{svc.name}</p>
                       <p className="text-sm text-ink-faint">
-                        {fmtTime(a.startsAt)} · {fmtDuration(svc.durationMin)} · con{" "}
+                        {fmtTime(a.startsAt)} · {fmtDuration(svc.durationMin)} · {t.withPrep}{" "}
                         {st.name}
                       </p>
                     </div>
@@ -608,7 +608,7 @@ export default function BookingSite({ slug }: { slug: string }) {
                   <p key={it.serviceId + it.startsAt} className="py-1">
                     <span className="font-medium">{svc.name}</span>{" "}
                     <span className="text-ink-faint">
-                      — {fmtTime(new Date(it.startsAt))} con {st.name}
+                      — {fmtTime(new Date(it.startsAt))} {t.withPrep} {st.name}
                     </span>
                   </p>
                 );

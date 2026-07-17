@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useDB, useMyRole } from "@/lib/store";
 import { supabase } from "@/lib/supabase";
+import { terms } from "@/lib/terms";
 import ShareBookingDialog from "@/components/admin/ShareBookingDialog";
 
 const NAV = [
@@ -26,6 +27,10 @@ export default function AdminNav() {
   const base = isDemo ? "/demo" : "/app";
   // RBAC de interfaz: el rol "staff" no ve finanzas ni configuración
   // (el enforcement duro está en las políticas RLS de la base).
+  const t = terms(db.business.vertical);
+  // "Equipo" se adapta al rubro (ej. "Canchas")
+  const labelFor = (item: (typeof NAV)[number]) =>
+    item.suffix === "/equipo" ? t.section : item.label;
   const nav = NAV.filter((item) => !item.adminOnly || role !== "staff");
 
   return (
@@ -45,7 +50,7 @@ export default function AdminNav() {
               }`}
             >
               <span className="text-sm leading-none">{item.icon}</span>
-              {item.label === "Configuración" ? "Ajustes" : item.label}
+              {item.label === "Configuración" ? "Ajustes" : labelFor(item)}
             </Link>
           );
         })}
@@ -80,7 +85,7 @@ export default function AdminNav() {
               <span className="w-4 text-center text-xs opacity-70">
                 {item.icon}
               </span>
-              {item.label}
+              {labelFor(item)}
             </Link>
           );
         })}

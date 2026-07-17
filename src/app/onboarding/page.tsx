@@ -16,6 +16,7 @@ import {
 } from "@/lib/cloud";
 import { VERTICAL_PRESETS, slugify } from "@/lib/verticals";
 import { VERTICAL_LABEL, type Vertical } from "@/lib/types";
+import { terms } from "@/lib/terms";
 import { TRIAL_DAYS } from "@/lib/config";
 import { fmtCLP } from "@/lib/dates";
 import LogoUploader from "@/components/admin/LogoUploader";
@@ -61,6 +62,7 @@ export default function OnboardingPage() {
   const [name, setName] = useState("");
   const [logo, setLogo] = useState<string | null>(null);
   const [vertical, setVertical] = useState<Vertical>("peluqueria");
+  const t = terms(vertical);
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [slug, setSlug] = useState("");
@@ -126,7 +128,7 @@ export default function OnboardingPage() {
     const openDays = hours.filter((h) => h.open);
     if (services.length === 0) return setError("Agrega al menos un servicio.");
     if (validStaff.length === 0)
-      return setError("Agrega al menos un profesional (puedes ser tú).");
+      return setError(`Agrega al menos una ${t.resource}.`);
     if (openDays.length === 0)
       return setError("Marca al menos un día de atención.");
     for (const h of openDays) {
@@ -435,11 +437,8 @@ export default function OnboardingPage() {
         {/* ---------- Paso 3: equipo ---------- */}
         {step === 3 && (
           <section>
-            <h1 className="font-serif text-3xl tracking-tight">Tu equipo</h1>
-            <p className="mt-2 text-sm text-ink-soft">
-              Quiénes atienden y en qué horario. Si trabajas solo, agrégate tú.
-              Después podrás afinar horarios y servicios por persona.
-            </p>
+            <h1 className="font-serif text-3xl tracking-tight">{t.teamStep}</h1>
+            <p className="mt-2 text-sm text-ink-soft">{t.teamHint}</p>
             <div className="mt-6 space-y-3">
               {staff.map((s, i) => (
                 <div key={i} className="flex gap-2">
@@ -452,7 +451,7 @@ export default function OnboardingPage() {
                         )
                       )
                     }
-                    placeholder="Nombre y apellido"
+                    placeholder={t.namePlaceholder}
                     className={input}
                   />
                   <input
@@ -464,7 +463,7 @@ export default function OnboardingPage() {
                         )
                       )
                     }
-                    placeholder="Cargo"
+                    placeholder={t.titlePlaceholder}
                     className={input}
                   />
                   {staff.length > 1 && (
@@ -482,7 +481,7 @@ export default function OnboardingPage() {
               onClick={() => setStaff((p) => [...p, { name: "", title: "" }])}
               className="mt-3 text-sm text-sage hover:underline"
             >
-              + Agregar otra persona
+              + {t.addAnother}
             </button>
 
             <div className="mt-10">
@@ -635,12 +634,12 @@ export default function OnboardingPage() {
                     </dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt>Equipo</dt>
+                    <dt>{t.section}</dt>
                     <dd>
                       {staff.filter((s) => s.name.trim()).length}{" "}
                       {staff.filter((s) => s.name.trim()).length === 1
-                        ? "profesional"
-                        : "profesionales"}
+                        ? t.resource
+                        : t.resources}
                     </dd>
                   </div>
                   <div className="flex justify-between gap-4">
