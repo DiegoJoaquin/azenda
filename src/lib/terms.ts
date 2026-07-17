@@ -78,3 +78,15 @@ const MAP: Partial<Record<Vertical, VerticalTerms>> = {
 export function terms(v: Vertical): VerticalTerms {
   return MAP[v] ?? PEOPLE;
 }
+
+// Ícono del módulo "Servicios" según el rubro (se muestra en la navegación).
+export const SERVICES_ICON: Record<Vertical, string> = {
+  peluqueria: "💇",
+  barberia: "💈",
+  spa_estetica: "🌿",
+  clinica_salud: "🩺",
+  psicologia: "🧠",
+  fitness: "💪",
+  canchas: "⚽",
+  generico: "🛎️",
+};

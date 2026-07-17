@@ -253,7 +253,7 @@ export default function ConfiguracionPage() {
         {/* Cuenta (panel real) */}
         {isCloud && (
           <section className="rounded-lg border border-line bg-surface px-6 py-5">
-            <h2 className="text-sm font-medium">Sesión</h2>
+            <h2 className="text-sm font-medium">Tu sesión</h2>
             <p className="mt-1 text-sm text-ink-soft">
               Cierra tu sesión en este dispositivo.
             </p>
@@ -262,9 +262,9 @@ export default function ConfiguracionPage() {
                 await supabase().auth.signOut();
                 router.replace("/login");
               }}
-              className="mt-4 rounded-md border border-line-strong px-4 py-2 text-sm text-ink-soft transition-colors hover:border-danger hover:text-danger"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-md border-2 border-danger/50 bg-danger-tint px-6 py-3.5 text-base font-semibold text-danger transition-colors hover:border-danger hover:bg-danger/10 sm:w-auto"
             >
-              Cerrar sesión
+              ⎋ Cerrar sesión
             </button>
           </section>
         )}

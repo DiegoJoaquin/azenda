@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useDB, useMyRole } from "@/lib/store";
 import { supabase } from "@/lib/supabase";
-import { terms } from "@/lib/terms";
+import { terms, SERVICES_ICON } from "@/lib/terms";
 import ShareBookingDialog from "@/components/admin/ShareBookingDialog";
 
 const NAV = [
@@ -31,6 +31,9 @@ export default function AdminNav() {
   // "Equipo" se adapta al rubro (ej. "Canchas")
   const labelFor = (item: (typeof NAV)[number]) =>
     item.suffix === "/equipo" ? t.section : item.label;
+  // El ícono de "Servicios" refleja el rubro (⚽ canchas, 💇 peluquería, …)
+  const iconFor = (item: (typeof NAV)[number]) =>
+    item.suffix === "/servicios" ? SERVICES_ICON[db.business.vertical] : item.icon;
   const nav = NAV.filter((item) => !item.adminOnly || role !== "staff");
 
   return (
@@ -49,7 +52,7 @@ export default function AdminNav() {
                 active ? "font-medium text-sage-deep" : "text-ink-faint"
               }`}
             >
-              <span className="text-sm leading-none">{item.icon}</span>
+              <span className="text-sm leading-none">{iconFor(item)}</span>
               {item.label === "Configuración" ? "Ajustes" : labelFor(item)}
             </Link>
           );
@@ -83,7 +86,7 @@ export default function AdminNav() {
               }`}
             >
               <span className="w-4 text-center text-xs opacity-70">
-                {item.icon}
+                {iconFor(item)}
               </span>
               {labelFor(item)}
             </Link>
