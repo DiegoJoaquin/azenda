@@ -111,9 +111,9 @@ export default function AdminNav() {
               await supabase().auth.signOut();
               router.replace("/login");
             }}
-            className="mt-2 text-[11px] text-ink-faint transition-colors hover:text-ink"
+            className="mt-3 w-full rounded-md border border-danger/40 px-3 py-2 text-left text-sm font-medium text-danger transition-colors hover:bg-danger-tint"
           >
-            Cerrar sesión
+            ⎋ Cerrar sesión
           </button>
         )}
       </div>
