@@ -27,7 +27,7 @@ un cuaderno.
 - [ ] Bio de Instagram (abajo, sección 4).
 - [ ] Tener 3–6 publicaciones listas ANTES de contactar a nadie (un perfil vacío
       no convierte). Usa las imágenes de la sección de diseño.
-- [ ] Link en la bio: por ahora `buuki-nu.vercel.app` (o el link directo a la
+- [ ] Link en la bio: por ahora `buuki.cl` (o el link directo a la
       demo). Cuando compres **buuki.cl**, lo cambias.
 - [ ] Preparar una demo en vivo que puedas mostrar: la página `/aura-estudio` y
       el panel `/demo` funcionan como demostración perfecta.
@@ -111,7 +111,7 @@ minutos.
 
 Saludos,
 Diego — Buuki
-[tu WhatsApp] · diazdiego011@gmail.com
+[tu WhatsApp] · buukiapp@gmail.com
 ```
 
 ### 3.4 Correo / DM — Clínicas, dentistas, kinesiólogos, psicólogos
@@ -134,7 +134,7 @@ lista y usted decide.
 
 Saludos cordiales,
 Diego — Buuki
-[tu WhatsApp] · diazdiego011@gmail.com
+[tu WhatsApp] · buukiapp@gmail.com
 ```
 
 ### 3.5 Seguimiento (si no responden en 2-3 días)

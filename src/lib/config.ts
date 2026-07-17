@@ -5,7 +5,7 @@
 export const TRIAL_DAYS = 7;
 
 // Contacto del dueño de la plataforma (Diego) para activaciones y soporte.
-export const CONTACT_EMAIL = "diazdiego011@gmail.com";
+export const CONTACT_EMAIL = "buukiapp@gmail.com";
 export const CONTACT_WHATSAPP = "56933278938"; // formato internacional sin "+"
 
 export function whatsappLink(message: string): string {
@@ -20,7 +20,7 @@ export function emailLink(subject: string, body: string): string {
 export const DEMO_SLUG = "aura-estudio";
 
 // Dominio público de la plataforma (actualizar al comprar dominio propio).
-export const SITE_URL = "https://azenda-nu.vercel.app";
+export const SITE_URL = "https://buuki.cl";
 
 /** URL pública de reservas de un negocio, la que comparte con sus clientes. */
 export function bookingUrl(slug: string): string {

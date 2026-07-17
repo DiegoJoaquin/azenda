@@ -13,7 +13,7 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const SITE_URL = "https://azenda-nu.vercel.app";
+const SITE_URL = "https://buuki.cl";
 const DESC =
   "Reservas online, agenda por profesional y gestión de clientes en una sola plataforma, adaptada a tu rubro.";
 
@@ -37,6 +37,10 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.webmanifest",
   icons: {
+    icon: [
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+    ],
     apple: "/apple-touch-icon.png",
   },
   appleWebApp: {
