@@ -2,12 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useDB, updateBusiness, resetDemo } from "@/lib/store";
+import { useRouter } from "next/navigation";
+import { useDB, updateBusiness, resetDemo, getMode } from "@/lib/store";
+import { supabase } from "@/lib/supabase";
 import { VERTICAL_LABEL } from "@/lib/types";
 import LogoUploader from "@/components/admin/LogoUploader";
 
 export default function ConfiguracionPage() {
   const db = useDB();
+  const router = useRouter();
+  const isCloud = getMode() === "cloud";
   const b = db.business;
 
   const [draft, setDraft] = useState({
@@ -246,22 +250,43 @@ export default function ConfiguracionPage() {
           </div>
         </section>
 
+        {/* Cuenta (panel real) */}
+        {isCloud && (
+          <section className="rounded-lg border border-line bg-surface px-6 py-5">
+            <h2 className="text-sm font-medium">Sesión</h2>
+            <p className="mt-1 text-sm text-ink-soft">
+              Cierra tu sesión en este dispositivo.
+            </p>
+            <button
+              onClick={async () => {
+                await supabase().auth.signOut();
+                router.replace("/login");
+              }}
+              className="mt-4 rounded-md border border-line-strong px-4 py-2 text-sm text-ink-soft transition-colors hover:border-danger hover:text-danger"
+            >
+              Cerrar sesión
+            </button>
+          </section>
+        )}
+
         {/* Demo */}
-        <section className="rounded-lg border border-line bg-surface px-6 py-5">
-          <h2 className="text-sm font-medium">Datos de demostración</h2>
-          <p className="mt-1 text-sm text-ink-soft">
-            Esta demo guarda todo en tu navegador. Puedes volver al estado
-            inicial cuando quieras.
-          </p>
-          <button
-            onClick={() => {
-              if (confirm("¿Restablecer todos los datos de la demo?")) resetDemo();
-            }}
-            className="mt-4 rounded-md border border-line-strong px-4 py-2 text-sm text-ink-soft transition-colors hover:border-danger hover:text-danger"
-          >
-            Restablecer demo
-          </button>
-        </section>
+        {!isCloud && (
+          <section className="rounded-lg border border-line bg-surface px-6 py-5">
+            <h2 className="text-sm font-medium">Datos de demostración</h2>
+            <p className="mt-1 text-sm text-ink-soft">
+              Esta demo guarda todo en tu navegador. Puedes volver al estado
+              inicial cuando quieras.
+            </p>
+            <button
+              onClick={() => {
+                if (confirm("¿Restablecer todos los datos de la demo?")) resetDemo();
+              }}
+              className="mt-4 rounded-md border border-line-strong px-4 py-2 text-sm text-ink-soft transition-colors hover:border-danger hover:text-danger"
+            >
+              Restablecer demo
+            </button>
+          </section>
+        )}
       </div>
     </div>
   );

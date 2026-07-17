@@ -283,6 +283,17 @@ export default function BookingSite({ slug }: { slug: string }) {
                 <dd>{scheduleLabel(db)}</dd>
               </div>
             </dl>
+            {biz.address && (
+              <div className="mt-6 max-w-lg overflow-hidden rounded-lg border border-line">
+                <iframe
+                  title={`Ubicación de ${biz.name}`}
+                  src={`https://maps.google.com/maps?q=${encodeURIComponent(biz.address)}&z=15&output=embed`}
+                  className="block h-52 w-full"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+            )}
             <button
               onClick={() => setStep("servicios")}
               className="mt-10 rounded-md bg-ink px-8 py-3.5 text-sm font-medium text-white transition-colors hover:bg-black"

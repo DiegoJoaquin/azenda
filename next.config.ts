@@ -14,6 +14,8 @@ const csp = [
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
   `connect-src 'self' ${supabaseUrl}`,
+  // Mapa embebido de Google en la página de reservas del negocio
+  "frame-src https://maps.google.com https://www.google.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

@@ -36,6 +36,11 @@ export default function ActivateDialog({
     }
   }
 
+  // Gmail web compose: funciona en el navegador sin depender de una app de
+  // correo configurada (el mailto: fallaba en Mac/Windows sin cliente).
+  const gmail =
+    `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(CONTACT_EMAIL)}` +
+    `&su=${encodeURIComponent(asunto)}&body=${encodeURIComponent(mensaje)}`;
   const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(mensaje)}`;
 
   return (
@@ -97,15 +102,24 @@ export default function ActivateDialog({
             </button>
           </div>
 
-          <a
-            href={mailto}
-            className="mt-6 block rounded-md border border-line-strong py-2.5 text-center text-sm transition-colors hover:border-ink"
-          >
-            Abrir en mi app de correo
-          </a>
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            <a
+              href={gmail}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-md border border-line-strong py-2.5 text-center text-sm transition-colors hover:border-ink"
+            >
+              Abrir en Gmail
+            </a>
+            <a
+              href={mailto}
+              className="block rounded-md border border-line-strong py-2.5 text-center text-sm transition-colors hover:border-ink"
+            >
+              Otra app de correo
+            </a>
+          </div>
           <p className="mt-2 text-center text-xs text-ink-faint">
-            Si el botón no abre nada, copia el correo y escríbenos desde Gmail,
-            Outlook o donde uses tu correo.
+            Si ninguno abre, copia el correo y escríbenos desde donde uses tu correo.
           </p>
         </div>
       </div>
