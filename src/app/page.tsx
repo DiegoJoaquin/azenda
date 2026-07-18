@@ -101,18 +101,19 @@ export default function Home() {
             <a href="#rubros" className="hover:text-ink">Rubros</a>
             <a href="#precios" className="hover:text-ink">Precios</a>
           </nav>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Link
               href="/login"
-              className="hidden text-sm text-ink-soft hover:text-ink sm:block"
+              className="whitespace-nowrap text-sm text-ink-soft hover:text-ink"
             >
               Iniciar sesión
             </Link>
             <Link
               href="/registro"
-              className="rounded-md bg-sage px-4 py-2 text-sm text-white transition-colors hover:bg-sage-deep"
+              className="whitespace-nowrap rounded-md bg-sage px-3 py-2 text-sm text-white transition-colors hover:bg-sage-deep sm:px-4"
             >
-              Crear cuenta gratis
+              <span className="sm:hidden">Crear cuenta</span>
+              <span className="hidden sm:inline">Crear cuenta gratis</span>
             </Link>
           </div>
         </div>
