@@ -79,6 +79,19 @@ export function terms(v: Vertical): VerticalTerms {
   return MAP[v] ?? PEOPLE;
 }
 
+// Título y subtítulo del paso "elegir servicio" en la reserva, por rubro.
+// ("¿Qué te vas a hacer?" calza en peluquería pero no en un spa o canchas.)
+export const SERVICE_STEP: Record<Vertical, { title: string; hint: string }> = {
+  peluqueria: { title: "¿Qué te vas a hacer?", hint: "Puedes elegir más de un servicio; se agendan seguidos." },
+  barberia: { title: "¿Qué te vas a hacer?", hint: "Puedes elegir más de un servicio; se agendan seguidos." },
+  spa_estetica: { title: "¿Qué tratamiento quieres?", hint: "Puedes elegir más de uno; se agendan seguidos." },
+  clinica_salud: { title: "¿Qué necesitas agendar?", hint: "Puedes elegir más de un servicio; se agendan seguidos." },
+  psicologia: { title: "¿Qué sesión quieres agendar?", hint: "Elige el tipo de sesión que necesitas." },
+  fitness: { title: "¿Qué quieres reservar?", hint: "Puedes elegir más de una; se agendan seguidas." },
+  canchas: { title: "¿Qué quieres arrendar?", hint: "Puedes elegir más de un arriendo; se agendan seguidos." },
+  generico: { title: "¿Qué quieres reservar?", hint: "Puedes elegir más de un servicio; se agendan seguidos." },
+};
+
 // Ícono del módulo "Servicios" según el rubro (se muestra en la navegación).
 export const SERVICES_ICON: Record<Vertical, string> = {
   peluqueria: "💇",

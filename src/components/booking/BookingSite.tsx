@@ -23,7 +23,7 @@ import {
 } from "@/lib/dates";
 import { isBusinessLocked, type Appointment, type DB } from "@/lib/types";
 import { googleCalendarUrl, icsDataUrl, mapsUrl } from "@/lib/calendar";
-import { terms } from "@/lib/terms";
+import { terms, SERVICE_STEP } from "@/lib/terms";
 
 const DAY_NAMES = [
   "domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado",
@@ -234,7 +234,7 @@ export default function BookingSite({ slug }: { slug: string }) {
                   }
                 >
                   {i < stepIndex ? "✓ " : ""}
-                  {s.label}
+                  {s.key === "profesional" ? t.ResourceCap : s.label}
                 </span>
               </div>
             ))}
@@ -312,10 +312,10 @@ export default function BookingSite({ slug }: { slug: string }) {
         {step === "servicios" && (
           <div className="pt-10">
             <h2 className="font-serif text-3xl tracking-tight">
-              ¿Qué te vas a hacer?
+              {SERVICE_STEP[biz.vertical].title}
             </h2>
             <p className="mt-2 text-sm text-ink-soft">
-              Puedes elegir más de un servicio; se agendan seguidos.
+              {SERVICE_STEP[biz.vertical].hint}
             </p>
             <div className="mt-8 space-y-10">
               {db.categories.map((cat) => {
