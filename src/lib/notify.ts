@@ -5,9 +5,16 @@
 //   SUPABASE_SERVICE_ROLE_KEY  — para leer la cola entre tenants
 //   RESEND_API_KEY             — para enviar correos
 //   RESEND_FROM                — remitente, ej: "Buuki <hola@tudominio.cl>"
+//   OWNER_EMAIL                — a dónde llega el resumen diario. IMPORTANTE:
+//     sin dominio verificado en Resend, DEBE ser el correo con que creaste la
+//     cuenta de Resend (Resend en sandbox solo entrega a esa dirección). Al
+//     verificar el dominio, puedes ponerlo en cualquier correo.
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { CONTACT_EMAIL } from "./config";
+
+// Destinatario del resumen diario (Diego). Configurable por entorno.
+const OWNER_EMAIL = process.env.OWNER_EMAIL || CONTACT_EMAIL;
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -175,12 +182,36 @@ async function sendOwnerDigest(sb: SupabaseClient): Promise<boolean> {
     );
   }
 
-  if (secciones.length === 0) return false; // nada que reportar, no enviar
+  // Estado general (se envía siempre, aunque no haya novedades, como
+  // "latido" diario para saber que todo funciona y cuántos negocios hay).
+  const { count: total } = await sb
+    .from("businesses")
+    .select("id", { count: "exact", head: true });
+  const { count: enPrueba } = await sb
+    .from("businesses")
+    .select("id", { count: "exact", head: true })
+    .eq("plan_status", "trial")
+    .gt("trial_ends_at", nowIso);
+  const { count: activos } = await sb
+    .from("businesses")
+    .select("id", { count: "exact", head: true })
+    .eq("plan_status", "active");
+
+  const estado =
+    `<p style="background:#eef0e3;border-radius:8px;padding:12px 16px;">` +
+    `<strong>Estado de Buuki hoy</strong><br>` +
+    `${total ?? 0} negocios en total · ${enPrueba ?? 0} en prueba · ${activos ?? 0} activos</p>`;
+
+  const cuerpo =
+    secciones.length > 0
+      ? secciones.join("")
+      : `<p style="color:#8a857c;">Sin novedades en las últimas 24 h.</p>`;
 
   const html = `
   <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; color: #1f1d1a; font-size: 14px;">
     <p style="font-family: Georgia, serif; font-size: 20px;">Buuki — resumen del día</p>
-    ${secciones.join("")}
+    ${estado}
+    ${cuerpo}
     <p style="font-size: 12px; color: #8a857c;">
       Para activar una cuenta: Supabase → Table Editor → businesses →
       cambiar plan_status a "active".
@@ -195,8 +226,11 @@ async function sendOwnerDigest(sb: SupabaseClient): Promise<boolean> {
     },
     body: JSON.stringify({
       from: process.env.RESEND_FROM ?? "Buuki <onboarding@resend.dev>",
-      to: [CONTACT_EMAIL],
-      subject: "Buuki — negocios nuevos y pruebas por vencer",
+      to: [OWNER_EMAIL],
+      subject:
+        secciones.length > 0
+          ? "Buuki — negocios nuevos y pruebas por vencer"
+          : "Buuki — resumen del día",
       html,
     }),
   });
