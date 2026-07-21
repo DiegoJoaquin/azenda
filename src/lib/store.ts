@@ -200,6 +200,54 @@ export function updateBusiness(patch: Partial<Business>) {
   if (mode === "cloud") cloud.cloudUpdateBusiness(load().business.id, patch);
 }
 
+// Importación masiva de clientes desde CSV. Evita duplicados por correo o
+// teléfono (contra los existentes y dentro del mismo archivo).
+export function importClients(
+  incoming: { name: string; email: string; phone: string; notes: string }[]
+): { added: number; skipped: number } {
+  const db = load();
+  const emails = new Set(
+    db.clients.map((c) => c.email.trim().toLowerCase()).filter(Boolean)
+  );
+  const phones = new Set(
+    db.clients.map((c) => c.phone.replace(/\D/g, "")).filter((p) => p.length >= 6)
+  );
+
+  const toAdd: Client[] = [];
+  let skipped = 0;
+  for (const r of incoming) {
+    const name = r.name.trim();
+    if (!name) {
+      skipped++;
+      continue;
+    }
+    const email = r.email.trim().toLowerCase();
+    const phoneDigits = r.phone.replace(/\D/g, "");
+    const dupEmail = email && emails.has(email);
+    const dupPhone = !email && phoneDigits.length >= 6 && phones.has(phoneDigits);
+    if (dupEmail || dupPhone) {
+      skipped++;
+      continue;
+    }
+    toAdd.push({
+      id: newId("cl"),
+      name,
+      email: r.email.trim(),
+      phone: r.phone.trim(),
+      notes: r.notes.trim(),
+      createdAt: new Date().toISOString(),
+    });
+    if (email) emails.add(email);
+    if (phoneDigits.length >= 6) phones.add(phoneDigits);
+  }
+
+  if (toAdd.length > 0) {
+    mutate((d) => d.clients.push(...toAdd));
+    if (mode === "cloud") cloud.cloudInsertClients(load().business.id, toAdd);
+  }
+  return { added: toAdd.length, skipped };
+}
+
 // ---------- Equipo ----------
 
 export function addStaff(data: {

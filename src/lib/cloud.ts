@@ -471,6 +471,25 @@ export function cloudInsertClient(businessId: string, c: Client) {
     .then(({ error }) => error && logErr("insertClient")(error));
 }
 
+// Inserción por lotes (importación de clientes). Sube en tandas de 500 para
+// no exceder límites de tamaño de request.
+export function cloudInsertClients(businessId: string, clients: Client[]) {
+  const rows = clients.map((c) => ({
+    id: c.id,
+    business_id: businessId,
+    name: c.name,
+    email: c.email || null,
+    phone: c.phone,
+    notes: c.notes,
+  }));
+  const sb = supabase();
+  for (let i = 0; i < rows.length; i += 500) {
+    sb.from("clients")
+      .insert(rows.slice(i, i + 500))
+      .then(({ error }) => error && logErr("insertClients")(error));
+  }
+}
+
 export function cloudUpdateClientNotes(id: string, notes: string) {
   supabase()
     .from("clients")

@@ -4,12 +4,14 @@ import { useMemo, useState } from "react";
 import { useDB, updateClientNotes } from "@/lib/store";
 import { fmtCLP, fmtDayLong, fmtTime, parseISO } from "@/lib/dates";
 import { STATUS_LABEL } from "@/lib/types";
+import ImportClientsModal from "@/components/admin/ImportClientsModal";
 
 export default function ClientesPage() {
   const db = useDB();
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [draftNotes, setDraftNotes] = useState<string | null>(null);
+  const [showImport, setShowImport] = useState(false);
 
   const clients = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -43,11 +45,19 @@ export default function ClientesPage() {
           selected ? "hidden md:flex" : "flex"
         } w-full shrink-0 flex-col border-line md:w-96 md:border-r`}
       >
-        <header className="border-b border-line bg-surface px-6 py-4">
-          <h1 className="font-serif text-2xl tracking-tight">Clientes</h1>
-          <p className="text-sm text-ink-faint">
-            {db.clients.length} registrados
-          </p>
+        <header className="flex items-start justify-between gap-3 border-b border-line bg-surface px-6 py-4">
+          <div>
+            <h1 className="font-serif text-2xl tracking-tight">Clientes</h1>
+            <p className="text-sm text-ink-faint">
+              {db.clients.length} registrados
+            </p>
+          </div>
+          <button
+            onClick={() => setShowImport(true)}
+            className="shrink-0 rounded-md border border-line-strong px-3 py-2 text-sm transition-colors hover:border-sage hover:text-sage"
+          >
+            ↥ Importar
+          </button>
         </header>
         <div className="border-b border-line bg-surface px-4 py-3">
           <input
@@ -189,6 +199,8 @@ export default function ClientesPage() {
           </div>
         )}
       </div>
+
+      {showImport && <ImportClientsModal onClose={() => setShowImport(false)} />}
     </div>
   );
 }
